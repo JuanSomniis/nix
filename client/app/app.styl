@@ -1,0 +1,39 @@
+$fa-font-path = '../assets/fonts/font-awesome/'
+@import '~font-awesome-stylus/stylus/index'
+$primary-color = #4a4a4a;
+$primary-color-dark =rgb(0, 165, 186);
+$font-color = black
+$fondo-nav = '../assets/images/fondo2.png';
+//#ede8dc
+
+#loading-bar .bar
+  background-color rgba(17, 110, 183, 1)!important
+  height 5px!important
+
+//
+// App-wide Styles
+//
+
+.browserupgrade
+  background #ccc
+  color #000
+  margin 0.2em 0
+  padding 0.2em 0
+
+// Responsive: Portrait tablets and up
+@media screen and (min-width: 768px)
+  .container
+    max-width 730px
+
+// Component styles are injected through gulp
+/* inject:styl */
+@import 'activo/addActivo/addActivo';
+@import 'cliente/addCliente/addCliente';
+@import 'login/login';
+@import 'main/master/master';
+@import 'main2/main';
+@import 'menu/menu';
+@import 'ticket/addTicket/addTicket';
+@import 'usuario/addUsuario/addUsuario';
+@import '../components/footer/footer';
+/* endinject */
