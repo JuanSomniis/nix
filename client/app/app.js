@@ -30,8 +30,6 @@ import addUsuario from './usuario/addUsuario/addUsuario.component';
 import addCliente from './cliente/addCliente/addCliente.component';
 import addActivo from './activo/addActivo/addActivo.component';
 import addTicket from './ticket/addticket/addTicket.component';
-//DIRECTIVES
-import inpil from '../directives/inpil/inpil.directive';
 //STYLESHEETS
 import './app.styl';
 import '../../node_modules/angular-material/angular-material.min.css'
@@ -41,8 +39,7 @@ angular.module('nixApp', [
   ngCookies, ngResource, ngSanitize, uiRouter,constants, util,ngMaterial,
   ngMessages,ngLoading,ngFileUpload, //==>EXTERNAL MODUELES
   bifrost,pop,dialog,hummer,select,  //==> SERVICES
-  login,menu,master,addUsuario,addCliente,addActivo,addTicket, // ==> COMPONENTS
-  inpil // ==> Directives
+  login,menu,master,addUsuario,addCliente,addActivo,addTicket // ==> COMPONENTS
 ])
   .config(routeConfig);
 

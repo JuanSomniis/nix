@@ -18,21 +18,20 @@ div(layout='row', layout-align='center center')
           div(ng-message='valid') Debes ingresar una fecha valida
           div(ng-message='required') Campo requerido
       //-Origen
-      md-input-container.md-block(flex)
-        md-autocomplete(
-          flex
-          required
-          md-min-length='0'
-          md-input-name='origen',
-          md-search-text='$ctrl.origenSearch'
-          md-items ='item in $ctrl.searchOrigen($ctrl.origenSearch)'
-          md-item-text='item'
-          md-floating-label='Origen'
-        )
-          md-item-template
-            span(md-highlight-text='$ctrl.origenSearch') {{item}}
-          div(ng-messages='ticketForm.origen.$error')
-            div(ng-message='required') Campo requerido
+      md-autocomplete(
+        flex
+        required
+        md-min-length='0'
+        md-input-name='origen',
+        md-search-text='$ctrl.origenSearch'
+        md-items ='item in $ctrl.searchOrigen($ctrl.origenSearch)'
+        md-item-text='item'
+        md-selected-item='$cltr.item'
+        md-floating-label='Origen')
+        md-item-template
+          span(md-highlight-text='$ctrl.origenSearch') {{item}}
+        div(ng-messages='ticketForm.origen.$error')
+          div(ng-message='required') Campo requerido
       //-Usuario Final
       md-input-container.md-block(flex)
         label Usuario final
@@ -44,7 +43,74 @@ div(layout='row', layout-align='center center')
         )
         div(ng-messages='ticketForm.contacto.$error')
           div(ng-message='required') Campo requerido.
+      //-Servicio
+      md-autocomplete(
+        flex
+        required
+        md-min-length='0'
+        md-input-name='servicio',
+        md-search-text='$ctrl.servicioSearch'
+        md-items ='item in $ctrl.searchServicio($ctrl.servicioSearch)'
+        md-item-text='item'
+        md-floating-label='Servicio')
+        md-item-template
+          span(md-highlight-text='$ctrl.servicioSearch') {{item}}
+        div(ng-messages='ticketForm.servicio.$error')
+          div(ng-message='required') Campo requerido
+      //- Descripcion
+      md-input-container.md-block(flex)
+        label Descripción
+        textarea(name='descripcion' required ng-model ='$ctrl.model.descripcion')
+        div(ng-messages='ticketForm.descripcion.$error')
+          div(ng-message='required') Campo requerido.
+      //-Activo
       div(layout='row')
+        md-autocomplete(
+          flex='80'
+          required
+          md-min-length='0'
+          md-input-name='activo',
+          md-search-text='$ctrl.activoSearch'
+          md-items ='item in $ctrl.searchActivo($ctrl.activoSearch)'
+          md-item-text='item.tipo_activo'
+          md-floating-label='Activo'
+          md-selected-item-change='$ctrl.selectedActivo(item)'
+          md-menu-class="autocomplete-custom-template")
+          md-item-template
+            span.item-title
+              md-icon(md-svg-icon='assets/images/ser.svg')
+              span {{item.tipo_activo}}
+            span.item-metadata
+              span.item-metastat
+                strong Inv :
+                |  {{item.inventario}}
+              br
+              span.item-metastat
+                strong S/N :
+                |  {{item.serial}}
+          div(ng-messages='ticketForm.origen.$error')
+            div(ng-message='required') Campo requerido
+        md-button.md-icon-button.md-primary( flex aria-label='Filtro')
+          md-tooltip Filtrar activos
+          i.material-icons filter_list
+        md-button.md-icon-button.md-primary( flex aria-label='Registrar')
+          md-tooltip Agregar activo
+          i.material-icons playlist_add
+
+      //-Tecnico
+      md-input-container.md-block(flex)
+        label Tecnico encargado
+        md-select(ng-model='$ctrl.model.tecnico' name='tecnico' required)
+          md-option(
+            ng-repeat='tecnico in $ctrl.tecnicoList'
+            ng-value='tecnico.id_usuario'
+          )  {{tecnico.nombre}}
+        div(ng-messages='ticketForm.tecnico.$error')
+          div(ng-message='required') Campo requerido.
+      br
+      md-button.md-primary.md-raised(ngf-select='', ng-model='$ctrl.model.images' ngf-accept="'image/*'"  ngf-multiple='true') Adjuntar archivos
+      md-button.md-primary(type='submit', ng-disabled='$ctrl.btnDisabled') Registrar
+      //-div(layout='row')
         //-Cliente
         md-autocomplete(
           required
@@ -66,75 +132,3 @@ div(layout='row', layout-align='center center')
             span(md-highlight-text='$ctrl.areaSearch') {{item.nombre}}
           div(ng-messages='ticketForm.area.$error')
             div(ng-message='required') Debes seleccionar o registrar un area.
-      //-Tecnico
-      md-input-container.md-block(flex)
-        label Tecnico
-        md-select(ng-model='$ctrl.model.tecnico' name='tecnico' required)
-          md-option(
-            ng-repeat='tecnico in $ctrl.tecnicoList'
-            ng-value='tecnico.id_usuario'
-          )  {{tecnico.nombre}}
-        div(ng-messages='ticketForm.tecnico.$error')
-          div(ng-message='required') Campo requerido.
-      //-Servicio
-      md-input-container.md-block(flex)
-        md-autocomplete(
-          flex
-          required
-          md-min-length='0'
-          md-input-name='servicio',
-          md-search-text='$ctrl.servicioSearch'
-          md-items ='item in $ctrl.searchServicio($ctrl.servicioSearch)'
-          md-item-text='item'
-          md-floating-label='Servicio'
-        )
-          md-item-template
-            span(md-highlight-text='$ctrl.servicioSearch') {{item}}
-          div(ng-messages='ticketForm.servicio.$error')
-            div(ng-message='required') Campo requerido
-      //- Descripcion
-      md-input-container.md-block(flex)
-        label Descripción
-        textarea(name='descripcion' required ng-model ='$ctrl.model.descripcion')
-        div(ng-messages='ticketForm.descripcion.$error')
-          div(ng-message='required') Campo requerido.
-      //-Activo
-      md-autocomplete(
-        flex
-        required
-        md-min-length='0'
-        md-input-name='activo',
-        md-search-text='$ctrl.activoSearch'
-        md-items ='item in $ctrl.searchActivo($ctrl.activoSearch)'
-        md-item-text='item'
-        md-floating-label='Activo'
-        md-menu-class="autocomplete-custom-template")
-        md-item-template
-          span.item-title
-            md-icon(md-svg-icon='assets/images/ser.svg')
-            span Computador
-          span.item-metadata
-            span.item-metastat
-              strong Inv :
-              |  I004478
-            br
-            span.item-metastat
-              strong S/N :
-              |  XMET543MSM23
-        div(ng-messages='ticketForm.origen.$error')
-          div(ng-message='required') Campo requerido
-
-      //-input#input-file-id.ng-hide(multiple type='file')
-        label.md-button.md-raised.md-primary(for='input-file-id') Adjuntar imagenes
-
-
-
-
-
-      md-button.md-primary(type='submit', ng-disabled='$ctrl.btnDisabled') Registrar
-    form( name='form')
-      //-| Single Image with validations
-        .button(ngf-select='', ng-model='file', name='file', ngf-pattern="'image/*'", ngf-accept="'image/*'", ngf-max-size='20MB', ngf-min-height='100', ngf-resize='{width: 100, height: 100}') Select
-      md-button.md-primary.md-raised(ngf-select='', ng-model='$ctrl.files', ngf-multiple='true') Adjuntar archivos
-      button(type='submit', ng-click='$ctrl.changeFile()') submit
-      img(ng-src='{{$ctrl.imer}}')

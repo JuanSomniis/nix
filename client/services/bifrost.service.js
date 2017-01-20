@@ -67,9 +67,21 @@ export function bifrostService($http, $hummer) {
 
   function ticket(vista){
     entity = vista ? vista : 'ticket';
+
     return methods;
   }
 
+  function documentacion(){
+    entity = 'documentacion';
+    return methods;
+  }
+
+  function imagen (){
+    entity ='imagen';
+    return methods;
+  }
+
+  this.documentacion = documentacion;
   this.ticket = ticket;
   this.area = area;
   this.usuario = usuario;
