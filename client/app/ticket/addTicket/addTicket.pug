@@ -7,16 +7,16 @@ div(layout='row', layout-align='center center')
           | Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa ducimus quas alias iusto, voluptas esse, aspernatur nobis reprehenderit! Provident, error eaque veniam maxime optio in dolorem sequi quaerat voluptate quae.
     form(name='ticketForm', ng-submit='$ctrl.nuevoTicket(ticketForm)')
       //-FECHA
-      md-input-container.md-block(flex)
-        label Atención
-        md-datepicker(
-          name='ticketForm.fecha'
-          ng-model='$ctrl.model.fecha'
-          md-hide-icons='calendar'
-        )
-        div(ng-messages='ticketForm.fecha.$error')
-          div(ng-message='valid') Debes ingresar una fecha valida
-          div(ng-message='required') Campo requerido
+        md-input-container.md-block(flex)
+          label Atención
+          md-datepicker(
+            name='ticketForm.fecha'
+            ng-model='$ctrl.model.fecha'
+            md-hide-icons='calendar'
+          )
+          div(ng-messages='ticketForm.fecha.$error')
+            div(ng-message='valid') Debes ingresar una fecha valida
+            div(ng-message='required') Campo requerido
       //-Origen
       md-autocomplete(
         flex

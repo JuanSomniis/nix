@@ -56,7 +56,6 @@ export class AddTicketComponent {
           model = this.$hummer.castFormToModel(frm),
           arrVal = [
             nTicket,
-            hoy,
             "'N'",
             model.origen,
             model.servicio,

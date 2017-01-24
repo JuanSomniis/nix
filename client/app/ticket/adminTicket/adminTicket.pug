@@ -1,0 +1,51 @@
+div(layout='row', layout-align='center center')
+  md-content(layout-padding flex='70')
+    md-card-title
+      md-card-title-text
+        span.md-headline Gestión de servicios
+        p.md-body-1
+          | Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa ducimus quas alias iusto, voluptas esse, aspernatur nobis reprehenderit! Provident, error eaque veniam maxime optio in dolorem sequi quaerat voluptate quae.
+div(layout='row' layout-align='center center')
+  md-card(flex='70')
+    md-toolbar.filter
+      .md-toolbar-tools
+        md-select.md-no-underline(ng-model='armor', placeholder='Tecnico')
+          md-option(value='cloth') Cloth
+          md-option(value='leather') Leather
+          md-option(value='chain') Chainmail
+          md-option(value='plate') Plate
+        md-select.md-no-underline(ng-model='armorf', placeholder='Cliente')
+          md-option(value='cloth') Cloth
+          md-option(value='leather') Leather
+          md-option(value='chain') Chainmail
+          md-option(value='plate') Plate
+        md-select.md-no-underline(ng-model='armorf', placeholder='Servicio')
+          md-option(value='cloth') Cloth
+          md-option(value='leather') Leather
+          md-option(value='chain') Chainmail
+          md-option(value='plate') Plate
+        md-select.md-no-underline(ng-model='armorf', placeholder='Estado')
+          md-option(value='cloth') Cloth
+          md-option(value='leather') Leather
+          md-option(value='chain') Chainmail
+          md-option(value='plate') Plate
+        span(flex)
+        div(flex layout='row')
+          md-datepicker(ng-model='myDate', md-placeholder='Desde' md-hide-icons='calendar' flex)
+          md-datepicker(ng-model='myDate2', md-placeholder='Hasta' md-hide-icons='calendar' flex)
+    md-card-content.out-margin
+      md-list
+        md-divider
+        md-list-item.noright.md-3-line(ng-repeat='item in [1,2,3,4,5,6,7,8]' )
+          md-icon.green(md-font-library="material-icons"  ng-class='red') remove_circle_outline
+          .md-list-item-text(layout='column')
+            h3
+              strong
+                a(href='#') Mantenimiento de impresora
+            h4 Blindex Bogotá &nbsp
+              i.material-icons.arrow keyboard_tab
+              | &nbsp Pedro Picapiedra Ramirez
+            p Ticket #10001 a cargo de Rafael Nuñez y creado por Pablo conca el 25 de Julio 2017 a las 20:30 pm
+          //-md-icon.md-secondary(md-font-library="material-icons" ng-click='null') face
+            md-icon.md-secondary(md-font-library="material-icons" ng-click='null') face
+          md-divider
