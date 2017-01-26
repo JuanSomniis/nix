@@ -9,43 +9,73 @@ div(layout='row' layout-align='center center')
   md-card(flex='70')
     md-toolbar.filter
       .md-toolbar-tools
-        md-select.md-no-underline(ng-model='armor', placeholder='Tecnico')
-          md-option(value='cloth') Cloth
-          md-option(value='leather') Leather
-          md-option(value='chain') Chainmail
-          md-option(value='plate') Plate
-        md-select.md-no-underline(ng-model='armorf', placeholder='Cliente')
-          md-option(value='cloth') Cloth
-          md-option(value='leather') Leather
-          md-option(value='chain') Chainmail
-          md-option(value='plate') Plate
-        md-select.md-no-underline(ng-model='armorf', placeholder='Servicio')
-          md-option(value='cloth') Cloth
-          md-option(value='leather') Leather
-          md-option(value='chain') Chainmail
-          md-option(value='plate') Plate
-        md-select.md-no-underline(ng-model='armorf', placeholder='Estado')
-          md-option(value='cloth') Cloth
-          md-option(value='leather') Leather
-          md-option(value='chain') Chainmail
-          md-option(value='plate') Plate
+        //-Tecnicos
+        md-select.md-no-underline(
+          ng-model='$ctrl.model.tecnico'
+          placeholder='Tecnico'
+          ng-change="$ctrl.filter('servicio')")
+          md-option(
+            ng-value='tecnico.id_tecnico'
+            ng-repeat='tecnico in $ctrl.tecnicos' ) {{tecnico.nombre}}
+        //-Clientes
+        md-select.md-no-underline(
+          ng-model='$ctrl.model.cliente'
+          placeholder='Cliente'
+          ng-change="$ctrl.filter('servicio')")
+          md-option(
+            ng-value='cliente.id_cliente'
+            ng-repeat='cliente in $ctrl.clientes') {{cliente.nombre}}
+        //-Servicios
+        md-select.md-no-underline(
+          ng-model='$ctrl.model.servicio'
+          placeholder='Servicio'
+          ng-change="$ctrl.filter('servicio')")
+          md-option(
+            ng-value='servicio'
+            ng-repeat='servicio in $ctrl.servicios') {{servicio}}
+        //-Estados
+        md-select.md-no-underline(
+          ng-model='$ctrl.model.estado'
+          placeholder='Estado'
+          ng-change="$ctrl.filter('servicio')")
+          md-option(
+            ng-value='estado.value'
+            ng-repeat='estado in $ctrl.estados')
+            md-icon(
+              md-font-library='material-icons'
+              ng-class='estado.value') {{estado.icon}}
+            | &nbsp {{estado.display}}
         span(flex)
         div(flex layout='row')
-          md-datepicker(ng-model='myDate', md-placeholder='Desde' md-hide-icons='calendar' flex)
-          md-datepicker(ng-model='myDate2', md-placeholder='Hasta' md-hide-icons='calendar' flex)
+          //- Desde
+          md-datepicker(
+            ng-model='$ctrl.model.fecha1'
+            md-placeholder='Desde'
+            md-hide-icons='calendar'
+            ng-change=''
+            flex)
+          | &nbsp
+          //- Hasta
+          md-datepicker(
+            ng-model='$ctrl.model.fecha2'
+            md-placeholder='Hasta'
+            md-hide-icons='calendar'
+            ng-change=''
+            flex)
     md-card-content.out-margin
       md-list
         md-divider
-        md-list-item.noright.md-3-line(ng-repeat='item in [1,2,3,4,5,6,7,8]' )
-          md-icon.green(md-font-library="material-icons"  ng-class='red') remove_circle_outline
+        md-list-item.noright.md-3-line(ng-repeat='ticket in $ctrl.tickets' )
+          md-icon.green(md-font-library="material-icons"  ng-class='ticket.estado') remove_circle_outline
           .md-list-item-text(layout='column')
             h3
               strong
-                a(href='#') Mantenimiento de impresora
-            h4 Blindex Bogotá &nbsp
+                a(href='#') {{ticket.titulo}}
+            h4 {{ticket.cliente}} &nbsp
               i.material-icons.arrow keyboard_tab
-              | &nbsp Pedro Picapiedra Ramirez
-            p Ticket #10001 a cargo de Rafael Nuñez y creado por Pablo conca el 25 de Julio 2017 a las 20:30 pm
+              | &nbsp {{ticket.usuario_final}}
+            p Ticket # {{ticket.N_ticket}} a cargo de {{ticket.tecnico}} y
+              | creado por {{ticket.creador}} el {{ticket.fecha}} a las {{ticket.hora}}
           //-md-icon.md-secondary(md-font-library="material-icons" ng-click='null') face
             md-icon.md-secondary(md-font-library="material-icons" ng-click='null') face
           md-divider

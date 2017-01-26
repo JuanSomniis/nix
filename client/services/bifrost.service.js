@@ -81,6 +81,7 @@ export function bifrostService($http, $hummer) {
     return methods;
   }
 
+  this.imagen = imagen;
   this.documentacion = documentacion;
   this.ticket = ticket;
   this.area = area;

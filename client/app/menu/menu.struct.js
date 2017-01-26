@@ -4,15 +4,15 @@ exports = module.exports = [{
   title: 'Ticket',
   items: [{
     icon: 'add',
-    state: 'newTicket',
+    state: 'm.addTicket',
     title: 'Agregar'
   }, {
     icon: 'content_paste',
-    state: 'adminTicket',
+    state: 'm.adminTicket',
     title: 'Administrar'
   }, {
     icon: 'bookmark_border',
-    state: 'requestTicket',
+    state: 'm.requestTicket',
     title: 'Solicitar'
   }]
 }, {

@@ -30,33 +30,20 @@ export class AddTicketComponent {
       this.activoSeleccionado = selected.id_activo;
   }
 
-  changeFile() {
-    let
-      reader = new FileReader(),
-      binary,
-      base64;
-    reader.addEventListener('loadend', () => {
-      binary = reader.result;
-      base64 = btoa(binary);
-      //this.imer = 'data:image/jpeg;base64,'+base64;
-      //this.$scope.$apply();
-    }, false);
-    reader.readAsBinaryString(this.files[0]);
-  }
-
   nuevoTicket(frm) {
 
     this.$bi.ticket('lastTicket').find(['N_Ticket'])
       .then(response => {
         let
-          hoy = 'convert(date, getdate())',
-          ahora = 'CONVERT(VARCHAR(8),GETDATE(),108)',
+          data = response.data[0],
+          hoy = new Date().toJSON().slice(0,10),
+          ahora = this.$hummer.now(),
           creador = (this.$cookieStore.get('user')).id_usuario,
-          nTicket = response.data[0] ? data.N_Ticket + 1 : '0001',
+          nTicket = data.N_Ticket ? data.N_Ticket + 1 : '0001',
           model = this.$hummer.castFormToModel(frm),
           arrVal = [
             nTicket,
-            "'N'",
+            "N",
             model.origen,
             model.servicio,
             model.contacto,
@@ -68,32 +55,35 @@ export class AddTicketComponent {
             hoy,
             ahora,
             model.descripcion,
-            "'II'",
+            "II",
             creador
           ];
-        console.log(arrVal, arrValDocum);
         this.$bi.ticket().insert(arrVal)
           .then(response => {
             arrValDocum.push(response.data[0].id_ticket);
-            this.$bi.documentacion.insert(arrValDocum)
-              .then(response => {
+            this.$bi.documentacion().insert(arrValDocum)
+              /*.then(responseDocum => {
                 if (this.model.images) {
                   let
+                    id_documentacion = responseDocum.data[0].id_documentacion,
                     reader = new FileReader(),
                     binary,
+                    img,
                     base64;
                   reader.addEventListener('loadend', () => {
                     binary = reader.result;
                     base64 = btoa(binary);
-                    //this.imer = 'data:image/jpeg;base64,'+base64;
+                    img = 'data:image/jpeg;base64,'+base64;
                     //this.$scope.$apply();
+                    this.$bi.imagen().insert([img,id_documentacion])
+                      .then(()=>console.log('todo bien ._.'));
                   }, false);
-                  reader.readAsBinaryString(this.files[0]);
+                  reader.readAsBinaryString(this.model.images[0]);
                 } else {
                   this.$pop.show('Ticket Registrado satisfactoriamente');
                   this.model = {};
                 }
-              })
+              })*/
           });
       })
   }
