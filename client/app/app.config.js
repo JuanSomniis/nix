@@ -2,6 +2,7 @@
 
 export function routeConfig($compileProvider,$mdDateLocaleProvider,$urlRouterProvider, $locationProvider,$mdThemingProvider,cfpLoadingBarProvider) {
   'ngInject';
+
   cfpLoadingBarProvider.includeSpinner = false;
   $urlRouterProvider.otherwise('/');
   $mdThemingProvider.theme('default')
@@ -28,4 +29,9 @@ export function routeConfig($compileProvider,$mdDateLocaleProvider,$urlRouterPro
   };
   $mdDateLocaleProvider.msgCalendar = 'Calendario';
   $mdDateLocaleProvider.msgOpenCalendar = 'Abrir calendario';
+}
+
+export function runFunction (amMoment) {
+  'ngInject'
+  amMoment.changeLocale('es');
 }

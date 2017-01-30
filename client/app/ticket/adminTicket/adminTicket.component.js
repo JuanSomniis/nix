@@ -1,37 +1,42 @@
 'use strict'
+//Libreries
 const angular = require('angular');
 const uiRouter = require('angular-ui-router');
-
+//Import the route
 import routes from './adminTicket.routes'
 
 export class AdminTicketComponent {
   /*@ngInject*/
-  constructor($select, $bi, $hummer, $pop, $scope, $cookieStore) {
+  constructor(moment, $select, $bi, $hummer, $pop, $scope, $cookieStore, $time) {
     this.$select = $select;
     this.$bi = $bi;
     this.$hummer = $hummer;
     this.$pop = $pop;
     this.$scope = $scope;
     this.$cookieStore = $cookieStore;
+    this.$time = $time;
+    this.moment = moment;
   }
   filter(entity) {
     let obj = this.model[entity]
   }
-  allTickets(filter){
+  allTickets(filter) {
     //All tickets
     this.$bi.ticket('full_ticket').all(filter)
       .then(response => {
-
-        for (let ticket in response.data) {
-          /*ticket.fecha =
-          ticket.hora =
-          ticket.icon =*/
-        }
+        response.data.forEach(ticket => {
+          let castFecha = this.moment(ticket.fecha);
+          ticket.fecha = castFecha.add(1, 'day').format("LL");
+          this.estados.forEach(estado => {
+            if (estado.value == ticket.estado)
+              ticket.icon = estado.icon
+          });
+        });
         this.tickets = response.data;
-
       });
   }
   $onInit() {
+    //Carga todos los tickets sin filtro inicial
     this.allTickets();
     //Modelo
     this.model = new Object();
@@ -45,7 +50,7 @@ export class AdminTicketComponent {
       .then(response => this.clientes = response.data);
     //USUARIOS
     this.$bi.usuario('tecnicos').all()
-      .then(response =>this.tecnicos = response.data);
+      .then(response => this.tecnicos = response.data);
     //Estados
     this.estados = [{
         value: 'N',

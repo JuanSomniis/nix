@@ -194,6 +194,11 @@ module.exports = function makeWebpackConfig(options) {
                 path.resolve(__dirname, 'node_modules/bootstrap-styl/bootstrap/*.styl'),
                 path.resolve(__dirname, 'client/app/app.styl')
             ]
+        },{
+
+          //JSON LOADER
+          test : /\.json$/,
+          loaders : ['json-loader']
         }]
     };
 

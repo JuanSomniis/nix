@@ -12,8 +12,16 @@ import ngMaterial from 'angular-material';
 import ngMessages from 'angular-messages';
 import ngLoading from 'angular-loading-bar';
 import ngFileUpload from 'ng-file-upload';
+import moment from  'moment';
+import momentTimeZone from 'moment-timezone';
+import es from 'moment/locale/es.js'
+import ngMoment from 'angular-moment';
+moment.locale('es');
 //TRASH
-import {routeConfig} from './app.config';
+import {
+  routeConfig,
+  runConfig
+} from './app.config';
 import constants from './app.constants';
 import util from '../components/util/util.module';
 //SERVICES
@@ -22,6 +30,7 @@ import pop from '../services/pop.service';
 import dialog from '../services/dialog.service';
 import hummer from '../services/hummer.service';
 import select from '../services/select.service';
+import timer from '../services/time.service';
 //COMPONENTS ROUTERS
 import login from './login/login.component';
 import menu from './menu/menu.component';
@@ -37,12 +46,13 @@ import '../../node_modules/angular-material/angular-material.min.css'
 import '../../node_modules/angular-loading-bar/build/loading-bar.min.css'
 
 angular.module('nixApp', [
-  ngCookies, ngResource, ngSanitize, uiRouter,constants, util,ngMaterial,
-  ngMessages,ngLoading,ngFileUpload, //==>EXTERNAL MODUELES
-  bifrost,pop,dialog,hummer,select,  //==> SERVICES
-  login,menu,master,addUsuario,addCliente,addActivo,addTicket,adminTicket // ==> COMPONENTS
-])
-  .config(routeConfig);
+    ngCookies, ngResource, ngSanitize, uiRouter, constants, util, ngMaterial,
+    ngMessages, ngLoading, ngFileUpload, ngMoment, //==>EXTERNAL MODUELES
+    bifrost, pop, dialog, hummer, select, timer, //==> SERVICES
+    login, menu, master, addUsuario, addCliente, addActivo, addTicket, adminTicket // ==> COMPONENTS
+  ])
+  .config(routeConfig)
+  .run(runConfig);
 
 angular.element(document)
   .ready(() => {

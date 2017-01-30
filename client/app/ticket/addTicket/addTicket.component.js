@@ -6,13 +6,14 @@ import routes from './addTicket.routes';
 
 export class AddTicketComponent {
   /*@ngInject*/
-  constructor($select, $bi, $hummer, $pop, $scope, $cookieStore) {
+  constructor($select,$time, $bi, $hummer, $pop, $scope, $cookieStore) {
     this.$select = $select;
     this.$bi = $bi;
     this.$hummer = $hummer;
     this.$pop = $pop;
     this.$scope = $scope;
     this.$cookieStore = $cookieStore;
+    this.$time = $time;
   }
   //Autocomplete inputs
   searchOrigen(query) {
@@ -35,9 +36,10 @@ export class AddTicketComponent {
     this.$bi.ticket('lastTicket').find(['N_Ticket'])
       .then(response => {
         let
+          now = this.$time.on(),
           data = response.data[0],
           hoy = new Date().toJSON().slice(0,10),
-          ahora = this.$hummer.now(),
+          ahora = now.fullHour,
           creador = (this.$cookieStore.get('user')).id_usuario,
           nTicket = data.N_Ticket ? data.N_Ticket + 1 : '0001',
           model = this.$hummer.castFormToModel(frm),

@@ -66,7 +66,7 @@ div(layout='row' layout-align='center center')
       md-list
         md-divider
         md-list-item.noright.md-3-line(ng-repeat='ticket in $ctrl.tickets' )
-          md-icon.green(md-font-library="material-icons"  ng-class='ticket.estado') remove_circle_outline
+          md-icon.green(md-font-library="material-icons"  ng-class='ticket.estado') {{ticket.icon}}
           .md-list-item-text(layout='column')
             h3
               strong
@@ -74,8 +74,8 @@ div(layout='row' layout-align='center center')
             h4 {{ticket.cliente}} &nbsp
               i.material-icons.arrow keyboard_tab
               | &nbsp {{ticket.usuario_final}}
-            p Ticket # {{ticket.N_ticket}} a cargo de {{ticket.tecnico}} y
-              | creado por {{ticket.creador}} el {{ticket.fecha}} a las {{ticket.hora}}
+            p Ticket # {{ticket.N_ticket}} a cargo de {{ticket.tecnico}} y &nbsp
+              | creado por {{ticket.creador}} el {{ticket.fecha}}.
           //-md-icon.md-secondary(md-font-library="material-icons" ng-click='null') face
             md-icon.md-secondary(md-font-library="material-icons" ng-click='null') face
           md-divider
