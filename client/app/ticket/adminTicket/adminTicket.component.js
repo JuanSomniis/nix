@@ -2,6 +2,7 @@
 //Libreries
 const angular = require('angular');
 const uiRouter = require('angular-ui-router');
+const _ = require('lodash');
 //Import the route
 import routes from './adminTicket.routes'
 
@@ -17,11 +18,8 @@ export class AdminTicketComponent {
     this.$time = $time;
     this.moment = moment;
   }
-  filter(entity) {
-    let obj = this.model[entity]
-  }
+
   allTickets(filter) {
-    //All tickets
     this.$bi.ticket('full_ticket').all(filter)
       .then(response => {
         response.data.forEach(ticket => {
@@ -32,7 +30,7 @@ export class AdminTicketComponent {
               ticket.icon = estado.icon
           });
         });
-        this.tickets = response.data;
+        this.tickets = _.sortBy(response.data,'N_Ticket').reverse();
       });
   }
   $onInit() {

@@ -29,9 +29,9 @@ export class AddActivoComponent {
       this.clienteSeleccionado = selected.id_cliente;
       let
         arrVal = ['distinct nombre', 'id_area'],
-        whereArr = [{
+        whereArr = {
           fk_id_cliente: this.clienteSeleccionado
-        }];
+        };
       this.$bi.area().find(arrVal, whereArr)
         .then(response => this.areaList = response.data);
 

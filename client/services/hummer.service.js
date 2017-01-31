@@ -5,18 +5,13 @@ const angular = require('angular');
 export function hummerService() {
   // AngularJS will instantiate a singleton by calling "new" on this function
 
-  function objectToSentence(objectArray) {
+  function objectToSentence(obWhere) {
     let sentence = '';
-    for (var i = 0; i < objectArray.length; i++) {
-      for (var name in objectArray[i]) {
-        sentence += " " + name + " = '" + objectArray[i][name] + "' and";
-      }
-    }
+    for (let where in obWhere)
+      sentence += " " + where + " = '" + obWhere[where] + "' and";
     sentence += ' 1= 1';
     return sentence;
   }
-
-
 
   function returnQuotes(array) {
     let sentence = '';
@@ -25,7 +20,7 @@ export function hummerService() {
         sentence += " '" + array[i] + "',";
       else
         sentence += " '" + array[i] + "'";
-    }
+      }
     return sentence;
   }
 
@@ -36,7 +31,7 @@ export function hummerService() {
         sentence += " " + array[i] + ",";
       else
         sentence += " " + array[i] + "";
-    }
+      }
     return sentence;
   }
 
@@ -56,18 +51,18 @@ export function hummerService() {
       if (!(item.startsWith('$')))
         //Se pasa al castObject los nuevos valores del modelo
         castObject[item] = frm[item].$modelValue;
-    //se retorna el objeto con los modelos
+  //se retorna el objeto con los modelos
     return castObject;
   }
 
   function evaluateRepetition(list, value, key) {
     let repeat = false;
     list.forEach(item => {
-      if (item[key] === value) repeat = true
+      if (item[key] === value)
+        repeat = true
     });
     return repeat;
   }
-
 
   this.evaluateRepetition = evaluateRepetition;
   this.castFormToModel = castFormToModel;
@@ -77,6 +72,4 @@ export function hummerService() {
   this.objectToSentence = objectToSentence;
 }
 
-export default angular.module('nixApp.hummer', [])
-  .service('$hummer', hummerService)
-  .name;
+export default angular.module('nixApp.hummer', []).service('$hummer', hummerService).name;

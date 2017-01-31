@@ -26,6 +26,7 @@ export function bifrostService($http, $hummer) {
   function all(whereArray) {
     let
       where = whereArray ? $hummer.objectToSentence(whereArray) : '1=1';
+      console.log(where);
     return $http.post(url + '/find', {
       where: where,
       entity: entity

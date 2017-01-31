@@ -1,7 +1,5 @@
 'use strict';
-
 import angular from 'angular';
-
 // import ngAnimate from 'angular-animate';
 import ngCookies from 'angular-cookies';
 import ngResource from 'angular-resource';
@@ -16,6 +14,7 @@ import moment from  'moment';
 import momentTimeZone from 'moment-timezone';
 import es from 'moment/locale/es.js'
 import ngMoment from 'angular-moment';
+import ngPagination from 'angular-utils-pagination';
 moment.locale('es');
 //TRASH
 import {
@@ -47,7 +46,7 @@ import '../../node_modules/angular-loading-bar/build/loading-bar.min.css'
 
 angular.module('nixApp', [
     ngCookies, ngResource, ngSanitize, uiRouter, constants, util, ngMaterial,
-    ngMessages, ngLoading, ngFileUpload, ngMoment, //==>EXTERNAL MODUELES
+    ngMessages, ngLoading, ngFileUpload, ngMoment,ngPagination, //==>EXTERNAL MODUELES
     bifrost, pop, dialog, hummer, select, timer, //==> SERVICES
     login, menu, master, addUsuario, addCliente, addActivo, addTicket, adminTicket // ==> COMPONENTS
   ])
