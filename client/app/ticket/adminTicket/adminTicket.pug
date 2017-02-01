@@ -49,18 +49,18 @@ div(layout='row' layout-align='center center')
         div(flex layout='row')
           //- Desde
           md-datepicker(
-            ng-model='$ctrl.model.fecha'
+            ng-model='$ctrl.fecha[0]'
             md-placeholder='Desde'
             md-hide-icons='calendar'
-            ng-change='$ctrl.allTickets($ctrl.model)'
+            ng-change='$ctrl.filterDates()'
             flex)
           | &nbsp
           //- Hasta
           md-datepicker(
-            ng-model='$ctrl.model.fecha2'
+            ng-model='$ctrl.fecha[1]'
             md-placeholder='Hasta'
             md-hide-icons='calendar'
-            ng-change=''
+            ng-change='$ctrl.filterDates(true)'
             flex)
     md-card-content.out-margin
       md-list
@@ -69,7 +69,7 @@ div(layout='row' layout-align='center center')
           .md-list-item-text(layout='column')
             h3
               strong
-                a(href='#') {{ticket.titulo}}
+                a( ui-sref='m.documTicket({id:ticket.id_ticket})') {{ticket.titulo}}
             h4 {{ticket.cliente_nombre}} &nbsp
               i.material-icons.arrow keyboard_tab
               | &nbsp {{ticket.usuario_final}}

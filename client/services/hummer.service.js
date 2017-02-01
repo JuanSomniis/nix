@@ -7,8 +7,16 @@ export function hummerService() {
 
   function objectToSentence(obWhere) {
     let sentence = '';
-    for (let where in obWhere)
-      sentence += " " + where + " = '" + obWhere[where] + "' and";
+    for (let key in obWhere) {
+      let value = obWhere[key];
+      //An special where between = true change the equials to this
+      if (obWhere[key] instanceof Object) {
+        if (obWhere[key].between)
+          sentence += ` ${key} between ${value.value} and`
+      } else {
+        sentence += ` ${key} = '${value}' and `;
+      }
+    }
     sentence += ' 1= 1';
     return sentence;
   }

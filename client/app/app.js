@@ -39,6 +39,7 @@ import addCliente from './cliente/addCliente/addCliente.component';
 import addActivo from './activo/addActivo/addActivo.component';
 import addTicket from './ticket/addticket/addTicket.component';
 import adminTicket from './ticket/adminTicket/adminTicket.component';
+import documTicket from './ticket/documTicket/documTicket.component';
 //STYLESHEETS
 import './app.styl';
 import '../../node_modules/angular-material/angular-material.min.css'
@@ -48,7 +49,7 @@ angular.module('nixApp', [
     ngCookies, ngResource, ngSanitize, uiRouter, constants, util, ngMaterial,
     ngMessages, ngLoading, ngFileUpload, ngMoment,ngPagination, //==>EXTERNAL MODUELES
     bifrost, pop, dialog, hummer, select, timer, //==> SERVICES
-    login, menu, master, addUsuario, addCliente, addActivo, addTicket, adminTicket // ==> COMPONENTS
+    login, menu, master, addUsuario, addCliente, addActivo, addTicket, adminTicket,documTicket, // ==> COMPONENTS
   ])
   .config(routeConfig)
   .run(runConfig);
