@@ -10,16 +10,35 @@ div(layout='row' layout-padding )
       md-card-content
         p
           i Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    md-card
+      md-card-header
+        md-card-avatar
+          img(ng-src='{{$ctrl.image}}')
+        md-card-header-text
+          span.md-title Sebastian
+          span.md-subhead 24 de Julio 2017  a las 01:20:10 pms
+      md-card-content
+        md-input-container.md-block
+          label Documentacion
+          textarea(ng-model='$ctrl.model.documentacion')
+        div(layout='row' layout-align='end center')
+          md-input-container.md-block(flex='20')
+            md-select.md-no-underline(placeholder='Solucionado' ng-model='$ctrl.model.solucionado')
+              md-option(ng-value='r') Remotamente
+              md-option(ng-value='s') En sitio
+          div(flex)
+            md-button.md-primary.md-raised Adjuntar imagenes
+            md-button.md-primary.md-raised Documentar
   div(flex='30' layout='column')
     md-card
       div(ng-repeat='feature in $ctrl.features')
         md-card-header
           md-card-header-text
-            span.md-title {{feature.title}}
-        md-card-content
-          md-content
-            div(layout='row' ng-repeat='itemFeature in feature.list')
-              div(flex layout='column')
-                b(flex) {{itemFeature.key}}
-              div(flex layout='column')
-                span(flex) {{itemFeature.value}}            
+            a(href="#" ng-click='$ctrl.openFeatures($index)')
+              span.md-subhead {{feature.title}}
+        md-card-content(ng-if='feature.visible')
+          div(layout='row' ng-repeat='itemFeature in feature.list')
+            div(flex layout='column')
+              b(flex) {{itemFeature.key}}
+            div(flex layout='column')
+              span(flex) {{itemFeature.value}}

@@ -44,6 +44,7 @@ import documTicket from './ticket/documTicket/documTicket.component';
 import './app.styl';
 import '../../node_modules/angular-material/angular-material.min.css'
 import '../../node_modules/angular-loading-bar/build/loading-bar.min.css'
+import '../../node_modules/angular-material-accordion/css/ang-accordion.css'
 
 angular.module('nixApp', [
     ngCookies, ngResource, ngSanitize, uiRouter, constants, util, ngMaterial,
