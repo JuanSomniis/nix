@@ -2,7 +2,7 @@
 
 export function routeConfig($compileProvider,$mdDateLocaleProvider,$urlRouterProvider, $locationProvider,$mdThemingProvider,cfpLoadingBarProvider) {
   'ngInject';
-  cfpLoadingBarProvider.includeSpinner = false;
+  //cfpLoadingBarProvider.includeSpinner = false;
   $urlRouterProvider.otherwise('/');
   $mdThemingProvider.theme('default')
         .primaryPalette('blue')

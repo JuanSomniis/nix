@@ -6,13 +6,31 @@ $font-color = black
 $fondo-nav = '../assets/images/fondo2.png';
 //#ede8dc
 
-#loading-bar .bar
-  background-color yellow
-  height 5px!important
+
 
 //
 // App-wide Styles
 //
+
+#loading-bar-spinner .spinner-icon {
+  width: 50px!important;
+  height: 50px!important;
+  border: 10px solid transparent!important;
+  border-top-color: #BBDEFB!important;
+  border-right-color: #64B5F6!important;
+  border-bottom-color:#2196F3 !important;
+  border-left-color: #1976D2!important;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
+}
+
+#loading-bar-spinner {
+    top: 50%!important;
+    left: 50%!important;
+}
+
+#loading-bar .bar
+  background-color white
+  height 5px!important
 
 md-content
   background-color white
@@ -49,6 +67,7 @@ button, html, input, select, textarea
 @import 'pagination';
 @import 'ticket/addTicket/addTicket';
 @import 'ticket/adminTicket/adminTicket';
+@import 'ticket/documTicket/documTicket';
 @import 'usuario/addUsuario/addUsuario';
 @import '../components/footer/footer';
 /* endinject */
