@@ -20,6 +20,8 @@ export class AdminTicketComponent {
   }
 
   allTickets(filter) {
+    if(filter)
+      filter["tipo"] = 'II';
     this.$bi.ticket('full_ticket').all(filter).then(response => {
       response.data.forEach(ticket => {
         let castFecha = this.moment(ticket.fecha);
@@ -43,24 +45,22 @@ export class AdminTicketComponent {
       fecha[0] = this.moment(this.fecha[0]).format(sqlFormat);
       fecha[1] = this.moment(this.fecha[1]).format(sqlFormat);
     }
-
-    this.model.fecha = {
-      value: ` '${fecha[0]}' and '${fecha[1]}'`,
-      between: true
-    }
+    // BETWEENCO = es una fecha se remplaza en la conversion
+    this.model.fecha = `'${fecha[0]}' and '${fecha[1]}'`;
     this.allTickets(this.model);
   }
   $onInit() {
     //Carga todos los tickets sin filtro inicial
-    this.allTickets();
+    this.allTickets({tipo:'II'});
     //Modelo
     this.model = new Object();
+    //Tecnicos
+    this.$bi.usuario('tecnicos').all().then(response => this.tecnicos = response.data);
     //SERVICIOS
     this.$bi.ticket().find(['distinct servicio']).then(response => this.servicios = this.$hummer.objectToArray(response.data));
     //CLIENTES
     this.$bi.cliente('cliente_completo').all().then(response => this.clientes = response.data);
-    //USUARIOS
-    this.$bi.usuario('tecnicos').all().then(response => this.tecnicos = response.data);
+
     //Estados
     this.estados = [
       {

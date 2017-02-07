@@ -15,7 +15,7 @@ div(layout='row' layout-align='center center')
           placeholder='Tecnico'
           ng-change="$ctrl.allTickets($ctrl.model)")
           md-option(
-            ng-value='tecnico.id_tecnico'
+            ng-value='tecnico.id_usuario'
             ng-repeat='tecnico in $ctrl.tecnicos' ) {{tecnico.nombre}}
         //-Clientes
         md-select.md-no-underline(

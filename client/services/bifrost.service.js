@@ -8,12 +8,24 @@ export function bifrostService($http, $hummer) {
     methods = {
       find: find,
       insert: insert,
-      all: all
+      all: all,
+      update : update
     };
   /*ACTIONS*/
-  function find(valArray, whereArray) {
+  function update (valObj,whereObj){
     let
-      where = whereArray ? $hummer.objectToSentence(whereArray) : '1=1',
+      where = whereObj ? $hummer.objectToSentence(whereObj) : '1=1',
+      val = $hummer.objectToSentence(valObj,','),
+      dataObject = {
+        where: where,
+        val: val,
+        entity: entity
+      };
+    return $http.put(url + '/', dataObject);
+  }
+  function find(valArray, whereObj) {
+    let
+      where = whereObj ? $hummer.objectToSentence(whereObj) : '1=1',
       val = $hummer.arrayToSentence(valArray),
       dataObject = {
         where: where,

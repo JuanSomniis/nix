@@ -22,3 +22,10 @@ export function insert(req, res) {
     entity = req.body.entity;
   Ructor.insert(entity,val).then(response => res.json(response.recordset));
 }
+
+export function update (req,res){
+  let val = req.body.val,
+    where = req.body.where,
+    entity = req.body.entity;
+  Ructor.update(entity,val,where).then(response => res.send(response))
+}

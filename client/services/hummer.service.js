@@ -1,26 +1,33 @@
 'use strict';
 const angular = require('angular');
-
 /*@ngInject*/
 export function hummerService() {
   // AngularJS will instantiate a singleton by calling "new" on this function
-
-  function objectToSentence(obWhere) {
-    let sentence = '';
-    for (let key in obWhere) {
-      let value = obWhere[key];
-      //An special where between = true change the equials to this
-      if (obWhere[key] instanceof Object) {
-        if (obWhere[key].between)
-          sentence += ` ${key} between ${value.value} and`
-      } else {
-        sentence += ` ${key} = '${value}' and `;
-      }
+  function objectToSentence(theObject, signa = 'and',equals='=') {
+    let
+      //Se define la variable sentence en donde se concatenara el objecot final
+      sentence='',
+      //Cuanta cantidad de caracteres se deben restar al terminar la cadena
+      lengthSigna = (signa.length * -1);
+    //Loop que recorre el objecto para podder concatenarlo
+    for (let key in theObject) {
+      let
+        //se instancia el valor para reducir codigo
+        value =  `${theObject[key].toString()}`,
+        //equals temporal dentro del for por cada item del objeto
+        _equals = equals;
+      //En caso que dentro del value haya un and se toma como fecha
+      if(value.indexOf("and") !== -1) _equals = 'between'
+      //De lo contrario se agregan las comillas simples para leerlo como varchar
+      else value = `'${value}'`
+      //Se concatena finalmente la sentencia
+      sentence += ` ${key} ${_equals} ${value} ${signa}`;
     }
-    sentence += ' 1= 1';
+    //Se elimina el signa de mas que esta al final
+    sentence = sentence.slice(0,lengthSigna);
     return sentence;
   }
-
+  //
   function returnQuotes(array) {
     let sentence = '';
     for (var i = 0; i < array.length; i++) {
@@ -59,7 +66,7 @@ export function hummerService() {
       if (!(item.startsWith('$')))
         //Se pasa al castObject los nuevos valores del modelo
         castObject[item] = frm[item].$modelValue;
-  //se retorna el objeto con los modelos
+    //se retorna el objeto con los modelos
     return castObject;
   }
 

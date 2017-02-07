@@ -53,8 +53,9 @@ export default class ructor {
     return this.con(sentence, true);
   }
 
-  update(entity, struct) {
-    let sentence = 'update ' + entity + ' set ' + struct.val + ' where ' + struct.where;
+  update(entity, val,where) {
+    let sentence = 'update ' + entity +' set ' + val + ' where ' + where;
+    console.dir(sentence);
     return this.con(sentence, false);
   }
 

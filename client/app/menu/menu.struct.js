@@ -16,7 +16,7 @@ exports = module.exports = [{
     title: 'Solicitar'
   }]
 }, {
-  title: 'Cleintes',
+  title: 'Clientes',
   items: [{
     icon: 'add',
     state: 'm.addCliente',
