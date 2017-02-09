@@ -15,6 +15,8 @@ import momentTimeZone from 'moment-timezone';
 import es from 'moment/locale/es.js'
 import ngMoment from 'angular-moment';
 import ngPagination from 'angular-utils-pagination';
+import mdDataTable from 'md-data-table';
+import '../../node_modules/md-data-table/dist/md-data-table-templates.js';
 moment.locale('es');
 //TRASH
 import {
@@ -40,17 +42,20 @@ import addActivo from './activo/addActivo/addActivo.component';
 import addTicket from './ticket/addticket/addTicket.component';
 import adminTicket from './ticket/adminTicket/adminTicket.component';
 import documTicket from './ticket/documTicket/documTicket.component';
+import adminCliente from './cliente/adminCliente/adminCliente.component';
 //STYLESHEETS
 import './app.styl';
 import '../../node_modules/angular-material/angular-material.min.css'
 import '../../node_modules/angular-loading-bar/build/loading-bar.min.css'
 import '../../node_modules/angular-material-accordion/css/ang-accordion.css'
+import '../../node_modules/md-data-table/dist/md-data-table-style.css'
 
 angular.module('nixApp', [
     ngCookies, ngResource, ngSanitize, uiRouter, constants, util, ngMaterial,
-    ngMessages, ngLoading, ngFileUpload, ngMoment,ngPagination, //==>EXTERNAL MODUELES
+    ngMessages, ngLoading, ngFileUpload, ngMoment,ngPagination,mdDataTable, //==>EXTERNAL MODUELES
     bifrost, pop, dialog, hummer, select, timer, //==> SERVICES
-    login, menu, master, addUsuario, addCliente, addActivo, addTicket, adminTicket,documTicket, // ==> COMPONENTS
+    login, menu, master, addUsuario, addCliente, addActivo, addTicket,
+      adminTicket,documTicket,adminCliente // ==> COMPONENTS
   ])
   .config(routeConfig)
   .run(runConfig);

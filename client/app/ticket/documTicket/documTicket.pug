@@ -10,7 +10,7 @@ div(layout='row' layout-padding )
       md-card-content
         p
           i Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    md-card
+    md-card(ng-if=" $ctrl.modo !== 'C' ")
       md-card-header
         md-card-avatar
           img(ng-src='{{$ctrl.image}}')
@@ -18,9 +18,20 @@ div(layout='row' layout-padding )
           span.md-title Sebastian
           span.md-subhead 24 de Julio 2017  a las 01:20:10 pms
       md-card-content(layout='column')
-        form(name='documentacionForm' ng-submit='$ctrl.documentacion()')
+        form(name='documentacionForm' ng-submit='$ctrl.frmSubmit()')
+          //PREGUNTAS DE LA ENCUESTA
+          md-input-container( layout='column' ng-if="$ctrl.modo === 'V' " ng-repeat='pregunta in $ctrl.preguntas')
+            label {{pregunta.placeholder}}
+            md-select.md-no-underline.md-block(
+              required
+              name='pregunta_{{$index+1}}'
+              ng-model='pregunta.model')
+              md-option(
+                ng-value='respuesta.value'
+                ng-repeat='respuesta in pregunta.respuestas') {{respuesta.value}}
+          //VISIBLE EN ESCALAR PARA SELECCIONAR TECNICO
           md-select.md-no-underline.md-block(
-            ng-if="$ctrl.model.cierre === 'E' "
+            ng-if="$ctrl.modo === 'E'"
             name='tecnico'
             flex
             ng-model='$ctrl.model.tecnico'
@@ -28,19 +39,25 @@ div(layout='row' layout-padding )
             md-option(
               ng-value='tecnico.id_tecnico'
               ng-repeat='tecnico in $ctrl.tecnicos') {{tecnico.nombre}}
+          //TEXTO SIEMPRE VISIBLE
           md-input-container.md-block.write(flex)
             textarea(name='texto' required ng-model='$ctrl.model.texto' placeholder='Documentación')
             div(ng-messages='documentacionForm.texto.$error')
               div(ng-message='required') Campo requerido
           div(row)
-          div(layout='row' layout-align='end center' flex)
-            md-radio-group(name='cierre' ng-model='$ctrl.model.cierre' layout='row')
+          div(layout='row' layout-align='end center' flex )
+            //RADIO GROUP PARA DEFINIR SI ES SOLUCION O NOTA, SOLO VISIBLE EN {N} O {P}
+            md-radio-group(name='cierre' ng-model='$ctrl.model.cierre' layout='row' ng-if="$ctrl.modo === 'N' || $ctrl.modo === 'P' ")
               md-radio-button.md-primary(value='R' flex) Remoto
               md-radio-button.md-primary(value='S' flex) En sitio
               md-radio-button.md-primary(value='NN' ) Nota
             span(flex)
+            //BOTONERA PARA 1.DOCUMENTAR-SOLUCIONAR
             md-button.md-primary.md-raised(ngf-select='', ng-model='$ctrl.model.images' ngf-accept="'image/*'"  ngf-multiple='true') Adjuntar archivos
-            md-button.md-primary.md-raised(type='submit') Documentar
+            md-button.md-primary.md-raised(type='submit')
+              div(ng-if="$ctrl.modo === 'N' || $ctrl.modo === 'P' ") Documentar
+              div(ng-if="$ctrl.modo == 'V'") Cerrar ticket
+              div(ng-if=" $ctrl.modo == 'E' ") Escalar ticket
   div(flex='30' layout='column')
     md-card
       div(ng-repeat='feature in $ctrl.features')

@@ -20,7 +20,7 @@ export class AdminTicketComponent {
   }
 
   allTickets(filter) {
-    if(filter)
+    if (filter)
       filter["tipo"] = 'II';
     this.$bi.ticket('full_ticket').all(filter).then(response => {
       response.data.forEach(ticket => {
@@ -51,7 +51,7 @@ export class AdminTicketComponent {
   }
   $onInit() {
     //Carga todos los tickets sin filtro inicial
-    this.allTickets({tipo:'II'});
+    this.allTickets({tipo: 'II'});
     //Modelo
     this.model = new Object();
     //Tecnicos
@@ -85,10 +85,7 @@ export class AdminTicketComponent {
 }
 
 export default
-angular.module('nixApp.adminTicket', [uiRouter])
-  .config(routes)
-  .component('adminTicket', {
-    template: require('./adminTicket.pug'),
-    controller: AdminTicketComponent
-  })
-  .name;
+angular.module('nixApp.adminTicket', [uiRouter]).config(routes).component('adminTicket', {
+  template: require('./adminTicket.pug'),
+  controller: AdminTicketComponent
+}).name;

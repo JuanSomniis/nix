@@ -69,7 +69,7 @@ div(layout='row' layout-align='center center')
           .md-list-item-text(layout='column')
             h3
               strong
-                a( ui-sref='m.documTicket({id:ticket.id_ticket})') {{ticket.titulo}}
+                a( ui-sref="m.documTicket({id:ticket.id_ticket,modo:ticket.estado})") {{ticket.titulo}}
             h4 {{ticket.cliente_nombre}} &nbsp
               i.material-icons.arrow keyboard_tab
               | &nbsp {{ticket.usuario_final}}
