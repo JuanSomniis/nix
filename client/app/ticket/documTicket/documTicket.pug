@@ -27,8 +27,8 @@ div(layout='row' layout-padding )
               name='pregunta_{{$index+1}}'
               ng-model='pregunta.model')
               md-option(
-                ng-value='respuesta.value'
-                ng-repeat='respuesta in pregunta.respuestas') {{respuesta.value}}
+                ng-value='respuesta.id_respuesta'
+                ng-repeat='respuesta in pregunta.respuestas') {{respuesta.respuesta}}
           //VISIBLE EN ESCALAR PARA SELECCIONAR TECNICO
           md-select.md-no-underline.md-block(
             ng-if="$ctrl.modo === 'E'"

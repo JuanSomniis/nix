@@ -17,7 +17,6 @@ export class DocumTicketCmponent {
     this.$stateParams = $stateParams;
     this.moment = moment;
   }
-
   messageRight() {
     this.$pop.show("Documentacion registrada satisfactoriamente")
   }
@@ -29,6 +28,11 @@ export class DocumTicketCmponent {
    *   @tipo = tipo de documentacion OO,SS,CC,EE
    */
   nota(tipo) {
+    let
+      valObj = {estado : 'P'},
+      whereObj = {id_ticket: this.$stateParams.id};
+    this.$bi.ticket().update(valObj, whereObj);
+    //Async same time
     let hoy = this.moment().format('YYYY[-]MM[-]D'),
       ahora = this.moment().format('h:mm:ss'),
       nombreUsuario = `${this.$cookieStore.get('user').apellido} ${this.$cookieStore.get('user').nombre}`,
@@ -46,7 +50,15 @@ export class DocumTicketCmponent {
 
   cerrar(){
     // Registrar la encuesta
-
+    let
+      valObj = { estado : 'C'},
+      whereObj = {id_ticket: this.$stateParams.id};
+    this.$bi.ticket().update(valObj, whereObj).then(()=>{
+      for (var i = 0; i < this.preguntas.length; i++) {
+        let arrVal = [this.preguntas[i].model,this.$stateParams.id];
+        this.$bi.encuesta().insert(arrVal).then(()=>this.messageRight);
+      }
+    });
   }
 
   escalar() {
@@ -54,14 +66,14 @@ export class DocumTicketCmponent {
     let
       valObj = {fk_id_tecnico: this.model.tecnico,estado : 'P'},
       whereObj = {id_ticket: this.$stateParams.id};
-    ths.$bi.ticket().update(valObj, whereObj).then(() => messageRight());
+    this.$bi.ticket().update(valObj, whereObj).then(() => this.messageRight());
   }
 
   solucionar() {
     let
-      valObj = {cierre: this.model.cierr, estado : 'V'},
+      valObj = {cierre: this.model.cierre, estado : 'V'},
       whereObj = {id_ticket: this.$stateParams.id};
-    ths.$bi.ticket().update(valObj, whereObj).then(()=> messageRight());
+    this.$bi.ticket().update(valObj, whereObj).then(()=> this.messageRight());
   }
 
   frmSubmit() {
@@ -79,93 +91,59 @@ export class DocumTicketCmponent {
     else if (this.modo === 'E') this.nota("EE").then(response => this.escalar());
   }
 
-  /*documentacion() {
-    const hoy = this.moment().format('YYYY[-]MM[-]D'),
-      ahora = this.moment().format('h:mm:ss');
-    let tipo = this.model.cierre === "NN"
-        ? "OO"
-        : "SS",
-      nombreUsuario = `${this.$cookieStore.get('user').apellido} ${this.$cookieStore.get('user').nombre}`,
-      arrVal = [
-        hoy,
-        ahora,
-        this.model.texto,
-        tipo,
-        nombreUsuario,
-        this.$stateParams.id
-      ];
-    this.$bi.documentacion().insert(arrVal).then(response => {
-      //SI EL TIPO ES SS SE ACTUALIZA EL CAMBIO DE TIPO CIERRE
-      if (tipo === 'SS') {
-        let valObj = {
-            cierre: this.model.cierre
-          },
-          whereObj = {
-            id_ticket: this.$stateParams.id
-          };
+  cargarPreguntas(){
+    this.$bi.pregunta().all()
+      .then(response=>{
+        for (var i = 0; i < response.data.length; i++) {
+          let
+            pregunta  = new Object(),
+            id = response.data[i].id_pregunta;
+          pregunta = {
+            id : id,
+            name: `pregunta${id}` ,
+            model: `pregunta${id}`,
+            placeholder: response.data[i].pregunta
+          }
+          this.$bi.respuesta().all({fk_id_pregunta : response.data[i].id_pregunta})
+            .then(respuestas=> {
+              pregunta["respuestas"] = respuestas.data
+              this.preguntas.push(pregunta);
+            })
+        }
+      });
+  }
+  cargarCaracteristicas(){
+    //Activo
+    //
+    //Cliente
+  }
+  cargarDocumentacion (){
+    this.$bi.documetnacion()
+      .all({fk_id_ticket : this.$stateParams.id})
+      .then(response => {
 
-        this.$bi.ticket().update(valObj, whereObj).then(response => {
-          this.$pop.show("Documentacion registrada")
-        });
-      } else {
-        this.$pop.show("Documentacion registrada")
-      }
-    });
-  }*/
+      });
+  }
 
   $onInit() {
-    //El modeo en el que se ejecuta la documentacion ESCALAR|DOCUMENTAR-SOLUCIONAR|CERRAR(ENCUESTA)
-    this.modo = this.$stateParams.modo;
+    //
+
+    //instancia de preguntas
+    this.preguntas = new Array();
+    //Instancia de modelo
     this.model = new Object();
     //Por defecto es un nota mas no un cierre
     this.model.cierre = 'NN';
+    //*FALTA IMAGEN
     this.image = '';
+    //El modeo en el que se ejecuta la documentacion ESCALAR|DOCUMENTAR-SOLUCIONAR|CERRAR(ENCUESTA)
+    this.modo = this.$stateParams.modo;
+    if(this.modo  === 'V') this.cargarPreguntas();
+    //
     let url = 'http://picasaweb.google.com/data/entry/api/user/mortombolo@gmail.com?alt=json';
     this.$http.get(url).then(response => this.image = response.data.entry.gphoto$thumbnail.$t).catch(err => console.log(err))
     // data => entry => gphoto$thumbnail ==> $t
     this.features = require('./docum.struct')
-    this.preguntas = [
-      {
-        name: 'pregunta1',
-        model: 'pregunta1',
-        placeholder: 'El servicio se atendio ',
-        respuestas: [
-          {
-            value: 'Si',
-            display: 'Si'
-          }, {
-            value: 'No',
-            display: 'No'
-          }
-        ]
-      }, {
-        name: 'pregunta2',
-        model: 'pregunta2',
-        placeholder: 'El servicio se atendio ',
-        respuestas: [
-          {
-            value: 'Si',
-            display: 'Si'
-          }, {
-            value: 'No',
-            display: 'No'
-          }
-        ]
-      }, {
-        name: 'pregunta3',
-        model: 'pregunta3',
-        placeholder: 'El servicio se atendio ',
-        respuestas: [
-          {
-            value: 'Si',
-            display: 'Si'
-          }, {
-            value: 'No',
-            display: 'No'
-          }
-        ]
-      }
-    ]
   }
 }
 

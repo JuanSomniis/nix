@@ -94,6 +94,23 @@ export function bifrostService($http, $hummer) {
     return methods;
   }
 
+  function respuesta (_entity = 'respuesta') {
+    entity = _entity;
+    return methods;
+  }
+
+  function pregunta (_entity='pregunta'){
+    entity =_entity;
+    return methods;
+  }
+  function encuesta (_entity='encuesta') {
+    entity = _entity;
+    return methods;
+  }
+
+  this.encuesta = encuesta;
+  this.respuesta = respuesta;
+  this.pregunta = pregunta;
   this.imagen = imagen;
   this.documentacion = documentacion;
   this.ticket = ticket;
