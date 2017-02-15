@@ -1,6 +1,7 @@
 'use strict';
 //const ructor = require('../ructor');
 import ructor from '../ructor';
+//let fs = require('fs')
 let Ructor = new ructor;
 
 export function index(req, res) {
@@ -29,3 +30,8 @@ export function update (req,res){
     entity = req.body.entity;
   Ructor.update(entity,val,where).then(response => res.send(response))
 }
+
+/*export function imagen (req,res){
+  console.dir(req.files.file);
+  //fs.writeFile('C:\Users\ivory\Pictures\dus'+req.files.file.name)
+}*/

@@ -1,22 +1,22 @@
 div(layout='row' layout-padding )
   div(flex='60' layout='column')
-    md-card(ng-repeat='item in [1,2]' )
+    md-card(ng-repeat='documento in $ctrl.documentos' )
       md-card-header
         md-card-avatar
           img(ng-src='{{$ctrl.image}}')
         md-card-header-text
-          span.md-title Sebastian
-          span.md-subhead 24 de Julio 2017  a las 01:20:10 pms
+          span.md-title {{documento.persona}}
+          span.md-subhead {{documento.fecha}}  a las {{documento.hora}}
       md-card-content
         p
-          i Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          i {{documento.texto}}
     md-card(ng-if=" $ctrl.modo !== 'C' ")
       md-card-header
         md-card-avatar
           img(ng-src='{{$ctrl.image}}')
         md-card-header-text
           span.md-title Sebastian
-          span.md-subhead 24 de Julio 2017  a las 01:20:10 pms
+          span.md-subhead {{$ctrl.hoy}}
       md-card-content(layout='column')
         form(name='documentacionForm' ng-submit='$ctrl.frmSubmit()')
           //PREGUNTAS DE LA ENCUESTA
@@ -37,7 +37,7 @@ div(layout='row' layout-padding )
             ng-model='$ctrl.model.tecnico'
             placeholder='Selecciona el tecnico a escalar')
             md-option(
-              ng-value='tecnico.id_tecnico'
+              ng-value='tecnico.id_usuario'
               ng-repeat='tecnico in $ctrl.tecnicos') {{tecnico.nombre}}
           //TEXTO SIEMPRE VISIBLE
           md-input-container.md-block.write(flex)

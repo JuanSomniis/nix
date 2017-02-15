@@ -6,7 +6,7 @@ import routes from './addTicket.routes';
 
 export class AddTicketComponent {
   /*@ngInject*/
-  constructor($select,$time, $bi, $hummer, $pop, $scope, $cookieStore) {
+  constructor($imagenix,moment, Upload, $select, $time, $bi, $hummer, $pop, $scope, $cookieStore, $http) {
     this.$select = $select;
     this.$bi = $bi;
     this.$hummer = $hummer;
@@ -14,6 +14,10 @@ export class AddTicketComponent {
     this.$scope = $scope;
     this.$cookieStore = $cookieStore;
     this.$time = $time;
+    this.$http = $http;
+    this.$upload = Upload;
+    this.$imagenix = $imagenix;
+    this.moment = moment;
   }
   //Autocomplete inputs
   searchOrigen(query) {
@@ -25,87 +29,82 @@ export class AddTicketComponent {
   searchActivo(query) {
     return this.$select.searchFull(query, this.activoList);
   }
-
   selectedActivo(selected) {
-    if (selected)
-      this.activoSeleccionado = selected.id_activo;
+    if (selected) this.activoSeleccionado = selected.id_activo;
   }
 
   nuevoTicket(frm) {
-
-    this.$bi.ticket('lastTicket').find(['N_Ticket'])
-      .then(response => {
-        let
-          now = this.$time.on(),
-          data = response.data[0],
-          hoy = new Date().toJSON().slice(0,10),
-          ahora = now.fullHour,
-          creador = (this.$cookieStore.get('user')).id_usuario,
-          nTicket = data.N_Ticket ? data.N_Ticket + 1 : '0001',
-          model = this.$hummer.castFormToModel(frm),
-          arrVal = [
-            nTicket,
-            "N",
-            model.origen,
-            model.servicio,
-            model.contacto,
-            model.tecnico,
-            creador,
-            this.activoSeleccionado
-          ],
-          arrValDocum = [
-            hoy,
-            ahora,
-            model.descripcion,
-            "II",
-            creador
-          ];
-        this.$bi.ticket().insert(arrVal)
-          .then(response => {
-            arrValDocum.push(response.data[0].id_ticket);
-            this.$bi.documentacion().insert(arrValDocum)
-              /*.then(responseDocum => {
-                if (this.model.images) {
-                  let
-                    id_documentacion = responseDocum.data[0].id_documentacion,
-                    reader = new FileReader(),
-                    binary,
-                    img,
-                    base64;
-                  reader.addEventListener('loadend', () => {
-                    binary = reader.result;
-                    base64 = btoa(binary);
-                    img = 'data:image/jpeg;base64,'+base64;
-                    //this.$scope.$apply();
-                    this.$bi.imagen().insert([img,id_documentacion])
-                      .then(()=>console.log('todo bien ._.'));
-                  }, false);
-                  reader.readAsBinaryString(this.model.images[0]);
-                } else {
-                  this.$pop.show('Ticket Registrado satisfactoriamente');
-                  this.model = {};
-                }
-              })*/
-          });
-      })
+    //Busca en la base de datos el ultimo activo ingresado para hacer la cuenta progresiva de N_Ticket
+    this.$bi.ticket('lastTicket').find(['N_Ticket']).then(response => {
+      //Declaración de variables
+      let
+        //Se define la fecha con formato especial para guardar en documentacion
+        hoy = this.moment().format('YYYY[-]MM[-]D'),
+        //Se define la hora con formato especial para guardar en documentacion
+        ahora = this.moment().format('h:mm:ss'),
+        //Se acorta la variable
+        data = response.data[0],
+        //Se acorta la variable
+        creador = (this.$cookieStore.get('user')).id_usuario,
+        //??
+        nTicket = data.N_Ticket? data.N_Ticket + 1: '0001',
+        //Se convierte el formulario a modelo para poder extraer los valores
+        model = this.$hummer.castFormToModel(frm),
+        // Se crea el arreglo  para ingresar el ticket
+        arrValTicket = [
+          nTicket,
+          "N",
+          model.origen,
+          model.servicio,
+          model.contacto,
+          model.tecnico,
+          creador,
+          this.activoSeleccionado,
+          "X" // ==> Cierre X quiere decir que aun no se ha cerrado
+        ],
+        //Se crea el arreglo para insertar documentacion
+        arrValDocum = [
+          hoy,
+          ahora,
+          model.descripcion,
+          "II",
+          creador
+        ];
+      //Se inserta el ticket
+      this.$bi.ticket().insert(arrValTicket).then(response => {
+        //Se agrega al arreglo de documentacion el ticket recien ingresado
+        arrValDocum.push(response.data[0].id_ticket);
+        //Se inserta la documentacion
+        this.$bi.documentacion().insert(arrValDocum).then(responseDocum => {
+          //Se acorta variable
+          let id_documentacion = responseDocum.data[0].id_documentacion;
+          //Si se seleccionaron imagenes
+          if (this.model.images) {
+            //??Si el array no posee imagenes significa que el filtro rechazo el peso permitido
+            if (this.model.images.length <= 0)
+              this.$pop.show("El tamaño de las imagenes supera al permitido {MAX: 1MB per image} ");
+            //??de lo contrario se insertan las imagenes
+            else
+              this.$imagenix.save(this.model.images, id_documentacion);
+          } else {
+            //Muestra popo de registro satisfactorio
+            this.$pop.show('Ticket Registrado satisfactoriamente');
+            //Limpia el modelo
+            this.model = {};
+          }
+        })
+      });
+    })
   }
 
   $onInit() {
     //Cara select para origen
-    this.$bi.ticket().find(['distinct origen'])
-      .then(response =>
-        this.origenList = this.$hummer.objectToArray(response.data)
-      );
+    this.$bi.ticket().find(['distinct origen']).then(response => this.origenList = this.$hummer.objectToArray(response.data));
     //Carga select para servicio
-    this.$bi.ticket().find(['distinct servicio'])
-      .then(response =>
-        this.servicioList = this.$hummer.objectToArray(response.data)
-      );
-    this.$bi.activo().all()
-      .then(response => this.activoList = response.data);
+    this.$bi.ticket().find(['distinct servicio']).then(response => this.servicioList = this.$hummer.objectToArray(response.data));
+    this.$bi.activo().all().then(response => this.activoList = response.data);
     //
-    this.$bi.usuario('tecnicos').all()
-      .then(response => this.tecnicoList = response.data);
+    this.$bi.usuario('tecnicos').all().then(response => this.tecnicoList = response.data);
     //Se activa el botón de submit por defecto
     this.btnDisabled = false;
     //Se instancia el select para Activo
@@ -119,10 +118,13 @@ export class AddTicketComponent {
   }
 }
 
-export default angular.module('nixApp.addTicket', [uiRouter])
-  .config(routes)
-  .component('addTicket', {
-    template: require('./addTicket.pug'),
-    controller: AddTicketComponent
-  })
-  .name;
+export default angular.module('nixApp.addTicket', [uiRouter]).config(routes).component('addTicket', {
+  template: require('./addTicket.pug'),
+  controller: AddTicketComponent
+}).name;
+/*this.$upload.upload({
+    url: 'api/astral/imagen',
+    method: 'POST',
+    //data: data, // Any data needed to be submitted along with the files
+    file: this.model.images[0]
+  });*/

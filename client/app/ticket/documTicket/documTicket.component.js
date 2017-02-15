@@ -5,7 +5,7 @@ import route from './documTicket.routes';
 
 export class DocumTicketCmponent {
   /*@ngInject*/
-  constructor(moment, $http, $select, $bi, $hummer, $pop, $scope, $cookieStore, $time, $stateParams) {
+  constructor( moment, $http, $select, $bi, $hummer, $pop, $scope, $cookieStore, $time, $stateParams) {
     this.$select = $select;
     this.$bi = $bi;
     this.$hummer = $hummer;
@@ -16,6 +16,7 @@ export class DocumTicketCmponent {
     this.$http = $http;
     this.$stateParams = $stateParams;
     this.moment = moment;
+
   }
   messageRight() {
     this.$pop.show("Documentacion registrada satisfactoriamente")
@@ -54,11 +55,11 @@ export class DocumTicketCmponent {
       valObj = { estado : 'C'},
       whereObj = {id_ticket: this.$stateParams.id};
     this.$bi.ticket().update(valObj, whereObj).then(()=>{
-      for (var i = 0; i < this.preguntas.length; i++) {
-        let arrVal = [this.preguntas[i].model,this.$stateParams.id];
-        this.$bi.encuesta().insert(arrVal).then(()=>this.messageRight);
-      }
+      this.preguntas.forEach((pregunta)=>{
+        this.$bi.encuesta().insert([pregunta.model,this.$stateParams.id]);
+      });
     });
+    this.messageRight();
   }
 
   escalar() {
@@ -87,8 +88,8 @@ export class DocumTicketCmponent {
         else this.messageRight();
       });
     }
-    else if (this.modo === 'V') this.nota("CC").then(response=>this.cerrar());
-    else if (this.modo === 'E') this.nota("EE").then(response => this.escalar());
+    else if (this.modo === 'V') this.nota("CC").then(() => this.cerrar());
+    else if (this.modo === 'E') this.nota("EE").then(() => this.escalar());
   }
 
   cargarPreguntas(){
@@ -118,16 +119,31 @@ export class DocumTicketCmponent {
     //Cliente
   }
   cargarDocumentacion (){
-    this.$bi.documetnacion()
+    this.$bi.documentacion()
       .all({fk_id_ticket : this.$stateParams.id})
-      .then(response => {
+      .then(response =>{
+        response.data.forEach((_documento)=>{
 
+          //_documento.fecha = this.moment(_documento.fecha).add(1, 'day').format("LL");
+          //_documento.hora =this.moment.utc(_documento.hora).format("HH:mm:ss");
+          _documento.fecha = this.$time.date(_documento.fecha,"LL",1)
+          _documento.hora = this.$time.time(_documento.hora);
+        });
+        this.documentos =  response.data;
       });
+  }
+
+  cargarTecnicos() {
+    this.$bi.usuario("tecnicos").all().then(response => {
+      this.tecnicos = response.data;
+    })
   }
 
   $onInit() {
     //
-
+    this.hoy = this.moment().format('LL')
+    //
+    this.cargarDocumentacion();
     //instancia de preguntas
     this.preguntas = new Array();
     //Instancia de modelo
@@ -139,6 +155,7 @@ export class DocumTicketCmponent {
     //El modeo en el que se ejecuta la documentacion ESCALAR|DOCUMENTAR-SOLUCIONAR|CERRAR(ENCUESTA)
     this.modo = this.$stateParams.modo;
     if(this.modo  === 'V') this.cargarPreguntas();
+    if(this.modo  === 'E') this.cargarTecnicos();
     //
     let url = 'http://picasaweb.google.com/data/entry/api/user/mortombolo@gmail.com?alt=json';
     this.$http.get(url).then(response => this.image = response.data.entry.gphoto$thumbnail.$t).catch(err => console.log(err))

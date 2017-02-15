@@ -75,8 +75,9 @@ div(layout='row' layout-align='center center')
               | &nbsp {{ticket.usuario_final}}
             p Ticket # {{ticket.N_ticket}} a cargo de {{ticket.tecnico_nombre}} y &nbsp
               | creado por {{ticket.creador}} el {{ticket.fecha}}.
-          //-md-icon.md-secondary(md-font-library="material-icons" ng-click='null') face
-            md-icon.md-secondary(md-font-library="material-icons" ng-click='null') face
+            md-icon.md-secondary(style='cursor:pointer' md-font-library="material-icons" ui-sref="m.documTicket({id:ticket.id_ticket,modo:'E'})") arrow_upward
+              md-tooltip Escalar
+            //-md-icon.md-secondary(md-font-library="material-icons" ng-click='null') face
           md-divider
 div(layout='row' flex layout-align='center center')
   dir-pagination-controls(flex align='center')

@@ -8,7 +8,7 @@ import routes from './adminTicket.routes'
 
 export class AdminTicketComponent {
   /*@ngInject*/
-  constructor(moment, $select, $bi, $hummer, $pop, $scope, $cookieStore, $time) {
+  constructor(/*moment,*/ $select, $bi, $hummer, $pop, $scope, $cookieStore, $time) {
     this.$select = $select;
     this.$bi = $bi;
     this.$hummer = $hummer;
@@ -16,7 +16,7 @@ export class AdminTicketComponent {
     this.$scope = $scope;
     this.$cookieStore = $cookieStore;
     this.$time = $time;
-    this.moment = moment;
+    //this.moment = moment;
   }
 
   allTickets(filter) {
@@ -24,8 +24,9 @@ export class AdminTicketComponent {
       filter["tipo"] = 'II';
     this.$bi.ticket('full_ticket').all(filter).then(response => {
       response.data.forEach(ticket => {
-        let castFecha = this.moment(ticket.fecha);
-        ticket.fecha = castFecha.add(1, 'day').format("LL");
+        //let castFecha =  this.moment(ticket.fecha);
+        //ticket.fecha = castFecha.add(1, 'day').format("LL");
+        ticket.fecha = this.$time.date(ticket.fecha,"LL",1);
         this.estados.forEach(estado => {
           if (estado.value == ticket.estado)
             ticket.icon = estado.icon
@@ -37,15 +38,13 @@ export class AdminTicketComponent {
 
   filterDates(second) {
     let fecha = new Array();
-    const sqlFormat = 'YYYY[-]MM[-]D';
     if (!second) {
-      fecha[0] = this.moment(this.fecha[0]).format(sqlFormat);
+      fecha[0] = this.$time.date(this.fecha[0]) //this.moment(this.fecha[0]).format(sqlFormat);
       fecha[1] = fecha[0];
     } else {
-      fecha[0] = this.moment(this.fecha[0]).format(sqlFormat);
-      fecha[1] = this.moment(this.fecha[1]).format(sqlFormat);
+      fecha[0] = this.$time.date(this.fecha[0]);
+      fecha[1] = this.$time.date(this.fecha[1]);
     }
-    // BETWEENCO = es una fecha se remplaza en la conversion
     this.model.fecha = `'${fecha[0]}' and '${fecha[1]}'`;
     this.allTickets(this.model);
   }
