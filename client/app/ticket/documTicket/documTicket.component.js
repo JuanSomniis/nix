@@ -5,7 +5,7 @@ import route from './documTicket.routes';
 
 export class DocumTicketCmponent {
   /*@ngInject*/
-  constructor( moment, $http, $select, $bi, $hummer, $pop, $scope, $cookieStore, $time, $stateParams) {
+  constructor($imagenix, moment, $http, $select, $bi, $hummer, $pop, $scope, $cookieStore, $time, $stateParams) {
     this.$select = $select;
     this.$bi = $bi;
     this.$hummer = $hummer;
@@ -16,6 +16,7 @@ export class DocumTicketCmponent {
     this.$http = $http;
     this.$stateParams = $stateParams;
     this.moment = moment;
+    this.$imagenix = $imagenix;
 
   }
   messageRight() {
@@ -123,9 +124,8 @@ export class DocumTicketCmponent {
       .all({fk_id_ticket : this.$stateParams.id})
       .then(response =>{
         response.data.forEach((_documento)=>{
-
-          //_documento.fecha = this.moment(_documento.fecha).add(1, 'day').format("LL");
-          //_documento.hora =this.moment.utc(_documento.hora).format("HH:mm:ss");
+          _documento.images = this.$imagenix.load(_documento.id_documentacion);
+          console.log(_documento.images);
           _documento.fecha = this.$time.date(_documento.fecha,"LL",1)
           _documento.hora = this.$time.time(_documento.hora);
         });

@@ -10,6 +10,7 @@ div(layout='row' layout-padding )
       md-card-content
         p
           i {{documento.texto}}
+          img(ng-repeat='image in documento.images'  ng-src='image')
     md-card(ng-if=" $ctrl.modo !== 'C' ")
       md-card-header
         md-card-avatar
