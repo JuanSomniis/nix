@@ -84,13 +84,13 @@ export function bifrostService($http, $hummer) {
     return methods;
   }
 
-  function documentacion(){
-    entity = 'documentacion';
+  function documentacion(_entity = 'documentacion'){
+    entity = _entity;
     return methods;
   }
 
-  function imagen (){
-    entity ='imagen';
+  function imagen (_entity='imagen'){
+    entity = _entity;
     return methods;
   }
 

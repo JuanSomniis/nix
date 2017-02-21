@@ -4,31 +4,38 @@ const angular = require('angular')
 export function imageService($bi,$q) {
 
   function save(imgArray, id_documentacion) {
+    //Crea variable para agregar las promesas indefinidas
+    let imgPromises = new Array();
+    //Recorre el array de imagenes por parametro
     imgArray.forEach(img => {
-      let reader = new FileReader(),
-        binary,
-        base64;
+      //Crea un nuevo lector de imagenes
+      let reader = new FileReader();
+      //Crea un evento al terminal de leer la imagen para de esta forma insertarla
       reader.addEventListener('loadend', () => {
-        binary = reader.result;
-        base64 = btoa(binary);
-        //img = 'data:image/jpeg;base64,'+base64;
-        $bi.imagen().insert([base64, id_documentacion]).then(() => console.log('todo bien ._.'));
+        //Crea imagen encriptada base 64
+        img = 'data:image/jpeg;base64,'+btoa(reader.result);
+        //Hace un push por cada imagen dentro del array
+        imgPromises.push($bi.imagen().insert([img, id_documentacion]));
       }, false);
-      reader.readAsBinaryString(img)
+      //Lee la imagen
+      reader.readAsBinaryString(img);
     });
-    //return true;
+    //
+    return $q.all(imgPromises);
   }
 
   function load(id_documentacion) {
-
+    let defer =  $q.defer();
     $bi.imagen().all({fk_id_documentacion: id_documentacion})
       .then(images => {
-        console.log(images);
         if(images.data.length >= 1)
-          images.data.forEach(img => img = `data:image/jpeg;base64,${img}`);
-        return images;
+          defer.resolve(images.data);
+        else
+          defer.resolve(false);
       });
+    return defer.promise;
   }
+
   this.load = load;
   this.save = save;
 }

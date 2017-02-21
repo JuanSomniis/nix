@@ -6,7 +6,7 @@ import routes from './addTicket.routes';
 
 export class AddTicketComponent {
   /*@ngInject*/
-  constructor($imagenix,moment, Upload, $select, $time, $bi, $hummer, $pop, $scope, $cookieStore, $http) {
+  constructor($dialog,$imagenix, moment, Upload, $select, $time, $bi, $hummer, $pop, $scope, $cookieStore, $http) {
     this.$select = $select;
     this.$bi = $bi;
     this.$hummer = $hummer;
@@ -18,6 +18,7 @@ export class AddTicketComponent {
     this.$upload = Upload;
     this.$imagenix = $imagenix;
     this.moment = moment;
+    this.$dialog = $dialog;
   }
   //Autocomplete inputs
   searchOrigen(query) {
@@ -30,69 +31,74 @@ export class AddTicketComponent {
     return this.$select.searchFull(query, this.activoList);
   }
   selectedActivo(selected) {
-    if (selected) this.activoSeleccionado = selected.id_activo;
-  }
+    if (selected)
+      this.activoSeleccionado = selected.id_activo;
+    }
 
-  nuevoTicket(frm) {
+  nuevoTicket(ev,frm) {
     //Busca en la base de datos el ultimo activo ingresado para hacer la cuenta progresiva de N_Ticket
     this.$bi.ticket('lastTicket').find(['N_Ticket']).then(response => {
-      //Declaración de variables
       let
-        //Se define la fecha con formato especial para guardar en documentacion
-        hoy = this.moment().format('YYYY[-]MM[-]D'),
-        //Se define la hora con formato especial para guardar en documentacion
-        ahora = this.moment().format('h:mm:ss'),
         //Se acorta la variable
         data = response.data[0],
-        //Se acorta la variable
-        creador = (this.$cookieStore.get('user')).id_usuario,
-        //??
+        //Declaración del ultimo numero de ticket
         nTicket = data.N_Ticket? data.N_Ticket + 1: '0001',
-        //Se convierte el formulario a modelo para poder extraer los valores
-        model = this.$hummer.castFormToModel(frm),
-        // Se crea el arreglo  para ingresar el ticket
-        arrValTicket = [
-          nTicket,
-          "N",
-          model.origen,
-          model.servicio,
-          model.contacto,
-          model.tecnico,
-          creador,
-          this.activoSeleccionado,
-          "X" // ==> Cierre X quiere decir que aun no se ha cerrado
-        ],
-        //Se crea el arreglo para insertar documentacion
-        arrValDocum = [
-          hoy,
-          ahora,
-          model.descripcion,
-          "II",
-          creador
-        ];
-      //Se inserta el ticket
-      this.$bi.ticket().insert(arrValTicket).then(response => {
-        //Se agrega al arreglo de documentacion el ticket recien ingresado
-        arrValDocum.push(response.data[0].id_ticket);
-        //Se inserta la documentacion
-        this.$bi.documentacion().insert(arrValDocum).then(responseDocum => {
+        //Titlo del cuadro de confirmacion
+        titulo = `Ticket Nº${nTicket}`,
+        //Texto dentro del dialogo de confirmacion
+        texto = "¿Desea registrar un nuevo ticket?";
+      //En caso de confirmar se realiza el ticket
+      this.$dialog.confirm(ev,titulo, texto).then(() => {
+        //Declaración de variables
+        let
+          //Se define la fecha con formato especial para guardar en documentacion
+          hoy = this.moment().format('YYYY[-]MM[-]D'),
+          //Se define la hora con formato especial para guardar en documentacion
+          ahora = this.moment().format('h:mm:ss'),
+          //Se acorta la variable
+          idCreador = (this.$cookieStore.get('user')).id_usuario,
           //Se acorta variable
-          let id_documentacion = responseDocum.data[0].id_documentacion;
-          //Si se seleccionaron imagenes
-          if (this.model.images) {
-            //??Si el array no posee imagenes significa que el filtro rechazo el peso permitido
-            if (this.model.images.length <= 0)
-              this.$pop.show("El tamaño de las imagenes supera al permitido {MAX: 1MB per image} ");
-            //??de lo contrario se insertan las imagenes
-            else
-              this.$imagenix.save(this.model.images, id_documentacion);
-          } else {
-            //Muestra popo de registro satisfactorio
-            this.$pop.show('Ticket Registrado satisfactoriamente');
-            //Limpia el modelo
-            this.model = {};
-          }
-        })
+          nombreCreador = (this.$cookieStore.get('user')).nombre,
+          //Se convierte el formulario a modelo para poder extraer los valores
+          model = this.$hummer.castFormToModel(frm),
+          // Se crea el arreglo  para ingresar el ticket
+          arrValTicket = [
+            nTicket,
+            "N",
+            model.origen,
+            model.servicio,
+            model.contacto,
+            model.tecnico,
+            idCreador,
+            this.activoSeleccionado,
+            "X" // ==> Cierre X quiere decir que aun no se ha cerrado
+          ],
+          //Se crea el arreglo para insertar documentacion
+          arrValDocum = [hoy, ahora, model.descripcion, "II", nombreCreador];
+        //Se inserta el ticket
+        this.$bi.ticket().insert(arrValTicket).then(response => {
+          //Se agrega al arreglo de documentacion el ticket recien ingresado
+          arrValDocum.push(response.data[0].id_ticket);
+          //Se inserta la documentacion
+          this.$bi.documentacion().insert(arrValDocum).then(responseDocum => {
+            //Se acorta variable
+            let id_documentacion = responseDocum.data[0].id_documentacion;
+            //Si se seleccionaron imagenes
+            if (this.model.images) {
+              //??Si el array no posee imagenes significa que el filtro rechazo el peso permitido
+              if (this.model.images.length <= 0)
+                this.$pop.show("El tamaño de las imagenes supera al permitido {MAX: 1MB per image} "); //??de lo contrario se insertan las imagenes
+              else
+                this.$imagenix.save(this.model.images, id_documentacion).then(() => this.$pop.show('Ticket Registrado satisfactoriamente'));
+              }
+            else {
+              //Muestra popo de registro satisfactorio
+              this.$pop.show('Ticket Registrado satisfactoriamente');
+              //Limpia el modelo
+              this.model = {};
+            }
+          })
+        });
       });
     })
   }

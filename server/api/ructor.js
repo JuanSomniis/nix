@@ -41,7 +41,7 @@ export default class ructor {
 
   findBy(entity, where, val) {
     let sentence = "  select " + val + " from  " + entity + " where " + where;
-    console.dir(sentence);
+    //console.dir(sentence);
     return this.con(sentence, true);
   }
 
@@ -49,13 +49,13 @@ export default class ructor {
     let
       sentence =
       "insert into " + entity + " Output inserted.id_"+ entity +" values (" + val + ")"
-    console.dir(sentence);
+    //console.dir(sentence);
     return this.con(sentence, true);
   }
 
   update(entity, val,where) {
     let sentence = 'update ' + entity +' set ' + val + ' where ' + where;
-    console.dir(sentence);
+    //console.dir(sentence);
     return this.con(sentence, false);
   }
 

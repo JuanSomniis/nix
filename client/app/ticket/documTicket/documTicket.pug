@@ -1,5 +1,6 @@
 div(layout='row' layout-padding )
   div(flex='60' layout='column')
+    //-- Documentacion basica repeticion
     md-card(ng-repeat='documento in $ctrl.documentos' )
       md-card-header
         md-card-avatar
@@ -10,7 +11,12 @@ div(layout='row' layout-padding )
       md-card-content
         p
           i {{documento.texto}}
-          img(ng-repeat='image in documento.images'  ng-src='image')
+    //- Imagenes del ticket
+    md-card(ng-repeat='img in $ctrl.imgs' )
+      md-card-content
+        img.responsive(ng-src='{{img.data_image}}')
+
+    //==> Cuadro text box para documentar
     md-card(ng-if=" $ctrl.modo !== 'C' ")
       md-card-header
         md-card-avatar
