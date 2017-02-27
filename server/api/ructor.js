@@ -36,13 +36,26 @@ export default class ructor {
 
   all() {
     let sentence = 'select * from ' + entity;
+    console.log(sentence);
     return this.con(sentence, true);
   }
 
   findBy(entity, where, val) {
     let sentence = "  select " + val + " from  " + entity + " where " + where;
-    //console.dir(sentence);
+    console.dir(sentence);
     return this.con(sentence, true);
+  }
+
+  paginate (entity,where,val,page,numPerPage) {
+    //select count(id_ticket)  from ticket
+    //select * from ticket order by id_ticket offset 0 rows fetch next 10 Rows Only
+    let 
+      total = (page * numPerPage),
+      sentence = 
+          `select ${val} from ${entity} where ${where} 
+          order by id_${entity} desc offset ${total} rows fetch next ${numPerPage} Rows Only`;
+    console.log(sentence);
+    return this.con(sentence,true);  
   }
 
   insert(entity, val) {

@@ -64,7 +64,7 @@ div(layout='row' layout-align='center center')
             flex)
     md-card-content.out-margin
       md-list
-        md-list-item.noright.md-3-line(dir-paginate='ticket in $ctrl.tickets | itemsPerPage: 10' )
+        md-list-item.noright.md-3-line(dir-paginate='ticket in $ctrl.tickets | itemsPerPage: 10'  total-items='$ctrl.totalTickets' current-page="$ctrl.current")
           md-icon(md-font-library="material-icons"  ng-class='ticket.estado') {{ticket.icon}}
           .md-list-item-text(layout='column')
             h3
@@ -80,4 +80,4 @@ div(layout='row' layout-align='center center')
             //-md-icon.md-secondary(md-font-library="material-icons" ng-click='null') face
           md-divider
 div(layout='row' flex layout-align='center center')
-  dir-pagination-controls(flex align='center')
+  dir-pagination-controls(flex align='center' on-page-change="$ctrl.allTickets($ctrl.model,newPageNumber)")

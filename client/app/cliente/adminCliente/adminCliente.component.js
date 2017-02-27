@@ -139,8 +139,10 @@ export class AdminClienteComponent {
   }
 }
 
-export default
-angular.module('nixApp.adminCliente', [uiRouter]).config(route).component('adminCliente', {
-  template: require('./adminCliente.pug'),
-  controller: AdminClienteComponent
-}).name
+export default angular
+  .module('nixApp.adminCliente', [uiRouter])
+  .config(route)
+  .component('adminCliente', {
+    template: require('./adminCliente.pug'),
+    controller: AdminClienteComponent
+  }).name

@@ -171,6 +171,7 @@ export class DocumTicketCmponent {
   }
 
   $onInit() {
+    this.id = this.$stateParams.id;
     this.cargarImagenes();
     //
     this.hoy = this.moment().format('LL')
@@ -195,7 +196,7 @@ export class DocumTicketCmponent {
     let url = 'http://picasaweb.google.com/data/entry/api/user/mortombolo@gmail.com?alt=json';
     this.$http.get(url).then(response => this.image = response.data.entry.gphoto$thumbnail.$t).catch(err => console.log(err))
     // data => entry => gphoto$thumbnail ==> $t
-    this.features = require('./docum.struct')
+   // this.features = require('./docum.struct')
   }
 }
 

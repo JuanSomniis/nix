@@ -9,7 +9,8 @@ export function bifrostService($http, $hummer) {
       find: find,
       insert: insert,
       all: all,
-      update : update
+      update : update,
+      paginate : paginate
     };
   /*ACTIONS*/
   function update (valObj,whereObj){
@@ -24,25 +25,38 @@ export function bifrostService($http, $hummer) {
     return $http.put(url + '/', dataObject);
   }
   function find(valArray, whereObj) {
+      let
+        where = whereObj ? $hummer.objectToSentence(whereObj) : '1=1',
+        val = $hummer.arrayToSentence(valArray),
+        dataObject = {
+          where: where,
+          val: val,
+          entity: entity
+        };
+      return $http.post(url + '/find', dataObject);
+  }
+
+  function paginate(whereObj,page,numPage,valArray = '*'){
     let
       where = whereObj ? $hummer.objectToSentence(whereObj) : '1=1',
-      val = $hummer.arrayToSentence(valArray),
+      val = valArray ===  '*' ? valArray : $hummer.arrayToSentence(valArray),
       dataObject = {
         where: where,
         val: val,
-        entity: entity
+        entity: entity,
+        page : page,
+        numb : numPage
       };
-    return $http.post(url + '/find', dataObject);
+    return $http.post(url + '/pagination',dataObject)
   }
 
   function all(whereArray) {
-    let
-      where = whereArray ? $hummer.objectToSentence(whereArray) : '1=1';
-      console.log(where);
-    return $http.post(url + '/find', {
-      where: where,
-      entity: entity
-    });
+      let
+        where = whereArray ? $hummer.objectToSentence(whereArray) : '1=1';
+      return $http.post(url + '/find', {
+        where: where,
+        entity: entity
+      });
   }
 
   function insert(valArray) {

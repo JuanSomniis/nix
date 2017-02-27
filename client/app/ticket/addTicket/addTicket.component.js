@@ -33,9 +33,12 @@ export class AddTicketComponent {
   selectedActivo(selected) {
     if (selected)
       this.activoSeleccionado = selected.id_activo;
-    }
+  }
+
+
 
   nuevoTicket(ev,frm) {
+    console.log(this.activoSeleccionado)
     //Busca en la base de datos el ultimo activo ingresado para hacer la cuenta progresiva de N_Ticket
     this.$bi.ticket('lastTicket').find(['N_Ticket']).then(response => {
       let
@@ -70,7 +73,7 @@ export class AddTicketComponent {
             model.contacto,
             model.tecnico,
             idCreador,
-            this.activoSeleccionado,
+            this.activoSeleccionado.id_activo,
             "X" // ==> Cierre X quiere decir que aun no se ha cerrado
           ],
           //Se crea el arreglo para insertar documentacion

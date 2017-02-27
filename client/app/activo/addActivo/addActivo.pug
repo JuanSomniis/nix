@@ -4,39 +4,77 @@ div(layout='row', layout-align='center center')
       md-card-title-text
         span.md-headline Nuevo activo
         p.md-body-1
-          | Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa ducimus quas alias iusto, voluptas esse, aspernatur nobis reprehenderit! Provident, error eaque veniam maxime optio in dolorem sequi quaerat voluptate quae.
+          | Lorem ipsum dolor sit amet, consectetur adipisicing elit. 
+          | Ipsa ducimus quas alias iusto, voluptas esse, aspernatur nobis 
+          | reprehenderit! Provident, error eaque veniam maxime optio in 
+          | dolorem sequi quaerat voluptate quae.
     form(name='activoForm', ng-submit='$ctrl.nuevoActivo(activoForm)')
-      md-autocomplete(required='', flex='', md-min-length='0', md-input-name='tipoActivo', md-search-text='$ctrl.tipoActivoSearch', md-items='item in $ctrl.searchTipoActivo($ctrl.tipoActivoSearch)', md-item-text='item', md-floating-label='Activo')
+      //-Tipo de activo
+      md-autocomplete(
+        required='', 
+        flex='', 
+        md-min-length='0', 
+        md-input-name='tipoActivo', 
+        md-search-text='$ctrl.tipoActivoSearch', 
+        md-items='item in $ctrl.searchTipoActivo($ctrl.tipoActivoSearch)', 
+        md-item-text='item', 
+        md-floating-label='Activo'
+        )
         md-item-template
           span(md-highlight-text='$ctrl.tipoActivoSearch') {{item}}
         div(ng-messages='activoForm.tipoActivo.$error')
           div(ng-message='required') Debes seleccionar o registrar un area.
+      //-Serial
       md-input-container.md-block(flex='')
         label Serial
-        input(type='text', name='serial', ng-model='$ctrl.model.serial', md-maxlength='40', required='')
+        input(
+          type='text', 
+          name='serial', 
+          ng-model='$ctrl.model.serial', 
+          md-maxlength='40', 
+          required='')
         div(ng-messages='activoForm.serial.$error')
           div(ng-message='required') Campo requerido.
           div(ng-message='md-maxlength') El campo de serial no puede superar los 40 caracteres.
       div(layout='row')
+        //- marca
         md-input-container.md-block(flex='')
           label Marca
-          input(type='text', name='marca', ng-model='$ctrl.model.marca', md-maxlength='40', required='')
+          input(
+            type='text', 
+            name='marca', 
+            ng-model='$ctrl.model.marca', 
+            md-maxlength='40', 
+            required='')
           div(ng-messages='activoForm.marca.$error')
             div(ng-message='required') Campo requerido.
             div(ng-message='md-maxlength') El campo de marca no puede superar los 40 caracteres.
+        //-modelo
         md-input-container.md-block(flex='')
           label Modelo
-          input(type='text', name='modelo', ng-model='$ctrl.model.modelo', md-maxlength='40', required='')
+          input(
+            type='text', 
+            name='modelo', 
+            ng-model='$ctrl.model.modelo', 
+            md-maxlength='40', 
+            required='')
           div(ng-messages='activoForm.modelo.$error')
             div(ng-message='required') Campo requerido.
             div(ng-message='md-maxlength') El campo de marca no puede superar los 40 caracteres.
       div(layout='row')
+        //Seguridad
         md-input-container.md-block(flex='')
           label Placa de seguridad
-          input(type='text', name='seguridad', ng-model='$ctrl.model.seguridad', md-maxlength='40', required='')
+          input(
+            type='text', 
+            name='seguridad', 
+            ng-model='$ctrl.model.seguridad', 
+            md-maxlength='40', 
+            required='')
           div(ng-messages='activoForm.seguridad.$error')
             div(ng-message='required') Campo requerido.
             div(ng-message='md-maxlength') El campo de marca no puede superar los 40 caracteres.
+        //Inventario
         md-input-container.md-block(flex='')
           label Placa de inventario
           input(type='text', name='inventario', ng-model='$ctrl.model.inventario', md-maxlength='40', required='')
@@ -45,18 +83,42 @@ div(layout='row', layout-align='center center')
             div(ng-message='md-maxlength') El campo de marca no puede superar los 40 caracteres.
       md-input-container.md-block
         label Espesificaciones
-        textarea(name='espesificaciones', ng-model='$ctrl.model.espesificaciones', required='')
+        textarea(
+          name='espesificaciones', 
+          ng-model='$ctrl.model.espesificaciones', 
+          required='')
         div(ng-messages='activoForm.espesificaciones.$error')
           div(ng-message='required') Campo requerido.
       div(layout='row')
-        md-autocomplete(required='', flex='', md-min-length='0', md-input-name='cliente', md-search-text='$ctrl.clienteSearch', md-items='item in $ctrl.searchCliente($ctrl.clienteSearch)', md-item-text='item.nombre', md-floating-label='Cliente', md-selected-item-change='$ctrl.selectedCliente(item)')
+        md-autocomplete(
+          required='', 
+          flex='', 
+          md-min-length='0', 
+          md-input-name='cliente', 
+          md-search-text='$ctrl.clienteSearch', 
+          md-items='item in $ctrl.searchCliente($ctrl.clienteSearch)', 
+          md-item-text='item.nombre', 
+          md-floating-label='Cliente', 
+          md-selected-item-change='$ctrl.selectedCliente(item)')
           md-item-template
             span(md-highlight-text='$ctrl.clienteSearch') {{item.nombre}}
           div(ng-messages='activoForm.cliente.$error')
             div(ng-message='required') Debes seleccionar un cliente.
-        md-autocomplete(ng-disabled='$ctrl.areaDisabled', required='', flex='', md-min-length='0', md-selected-item-change='$ctrl.selectedArea(item)', md-input-name='area', md-search-text='$ctrl.areaSearch', md-items='item in $ctrl.searchArea($ctrl.areaSearch)', md-item-text='item.nombre', md-floating-label='Area')
+        md-autocomplete(
+          ng-disabled='$ctrl.areaDisabled', 
+          required='', 
+          flex='', 
+          md-min-length='0', 
+          md-selected-item-change='$ctrl.selectedArea(item)', 
+          md-input-name='area', 
+          md-search-text='$ctrl.areaSearch', 
+          md-items='item in $ctrl.searchArea($ctrl.areaSearch)', 
+          md-item-text='item.nombre', 
+          md-floating-label='Area')
           md-item-template
             span(md-highlight-text='$ctrl.areaSearch') {{item.nombre}}
           div(ng-messages='activoForm.area.$error')
             div(ng-message='required') Debes seleccionar o registrar un area.
-      md-button.md-primary(type='submit', ng-disabled='$ctrl.btnDisabled') Registrar
+      md-button.md-primary(
+        type='submit', 
+        ng-disabled='$ctrl.btnDisabled') Registrar

@@ -1,5 +1,5 @@
 div(layout='row', layout-align='center center')
-  md-content(layout-padding flex='45')
+  md-content(layout-padding flex='50')
     md-card-title
       md-card-title-text
         span.md-headline Nuevo ticket
@@ -64,40 +64,41 @@ div(layout='row', layout-align='center center')
         div(ng-messages='ticketForm.descripcion.$error')
           div(ng-message='required') Campo requerido.
       //-Activo
-      div(layout='row')
-        md-autocomplete(
-          flex='80'
-          required
-          md-min-length='0'
-          md-input-name='activo',
-          md-search-text='$ctrl.activoSearch'
-          md-items ='item in $ctrl.searchActivo($ctrl.activoSearch)'
-          md-item-text='item.tipo_activo'
-          md-floating-label='Activo'
-          md-selected-item-change='$ctrl.selectedActivo(item)'
-          md-menu-class="autocomplete-custom-template")
-          md-item-template
-            span.item-title
-              md-icon(md-svg-icon='assets/images/ser.svg')
-              span {{item.tipo_activo}}
-            span.item-metadata
-              span.item-metastat
-                strong Inv :
-                |  {{item.inventario}}
-              br
-              span.item-metastat
-                strong S/N :
-                |  {{item.serial}}
-          div(ng-messages='ticketForm.origen.$error')
-            div(ng-message='required') Campo requerido
-        md-button.md-icon-button.md-primary( flex aria-label='Filtro')
-          md-tooltip Filtrar activos
-          i.material-icons filter_list
-        md-button.md-icon-button.md-primary( flex aria-label='Registrar')
-          md-tooltip Agregar activo
-          i.material-icons playlist_add
+        div(layout='row')
+          md-autocomplete(
+            flex='80'
+            required
+            md-min-length='0'
+            md-input-name='activo',
+            md-search-text='$ctrl.activoSearch'
+            md-items ='item in $ctrl.searchActivo($ctrl.activoSearch)'
+            md-item-text='item.tipo_activo'
+            md-floating-label='Activo'
+            md-selected-item-change='$ctrl.selectedActivo(item)'
+            md-menu-class="autocomplete-custom-template")
+            md-item-template
+              span.item-title
+                md-icon(md-svg-icon='assets/images/ser.svg')
+                span {{item.tipo_activo}}
+              span.item-metadata
+                span.item-metastat
+                  strong Inv :
+                  |  {{item.inventario}}
+                br
+                span.item-metastat
+                  strong S/N :
+                  |  {{item.serial}}
+            div(ng-messages='ticketForm.origen.$error')
+              div(ng-message='required') Campo requerido
+          md-button.md-icon-button.md-primary( flex aria-label='Filtro')
+            md-tooltip Filtrar activos
+            i.material-icons filter_list
+          md-button.md-icon-button.md-primary( flex aria-label='Registrar')
+            md-tooltip Agregar activo
+            i.material-icons playlist_add
 
       //-Tecnico
+      br
       md-input-container.md-block(flex)
         label Tecnico encargado
         md-select(ng-model='$ctrl.model.tecnico' name='tecnico' required)
@@ -107,6 +108,8 @@ div(layout='row', layout-align='center center')
           )  {{tecnico.nombre}}
         div(ng-messages='ticketForm.tecnico.$error')
           div(ng-message='required') Campo requerido.
+      br
+      activo-list(  ng-model='$ctrl.activoSeleccionado')
       br
       md-button.md-primary.md-raised(ngf-select='', ngf-max-size="1MB" ng-model='$ctrl.model.images' ngf-accept="'image/*'"  ngf-multiple='true') Adjuntar archivos
       md-button.md-primary(type='submit', ng-disabled='$ctrl.btnDisabled') Registrar

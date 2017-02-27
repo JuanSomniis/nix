@@ -31,6 +31,19 @@ export function update (req,res){
   Ructor.update(entity,val,where).then(response => res.send(response))
 }
 
+export function pagination (req,res){
+  /*Pagina y tabla */
+  let
+    where = req.body.where,
+    val = req.body.val,
+    entity = req.body.entity,
+    page = req.body.page,
+    numPerPage = req.body.numb;
+  Ructor.paginate(entity, where, val,page,numPerPage)
+    .then(response => res.json(response.recordset))
+    .catch(err => console.log(err));
+
+}
 /*export function imagen (req,res){
   console.dir(req.files.file);
   //fs.writeFile('C:\Users\ivory\Pictures\dus'+req.files.file.name)

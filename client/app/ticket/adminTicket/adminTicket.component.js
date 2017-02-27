@@ -19,24 +19,28 @@ export class AdminTicketComponent {
     //this.moment = moment;
   }
 
-  allTickets(filter) {
-    if (filter)
+  allTickets(filter,page) {
+    if (filter) 
       filter["tipo"] = 'II';
-    this.$bi.ticket('full_ticket').all(filter).then(response => {
+    this.currenTotal(filter);
+    this.$bi.ticket('full_ticket')
+      .paginate(filter,page-1,10)
+      .then(response => {
       response.data.forEach(ticket => {
-        //let castFecha =  this.moment(ticket.fecha);
-        //ticket.fecha = castFecha.add(1, 'day').format("LL");
         ticket.fecha = this.$time.date(ticket.fecha,"LL",1);
         this.estados.forEach(estado => {
           if (estado.value == ticket.estado)
             ticket.icon = estado.icon
         });
       });
-      this.tickets = _.sortBy(response.data, 'N_Ticket').reverse();
+      //this.tickets = _.sortBy(response.data, 'N_Ticket').reverse();
+      this.tickets = response.data;
+      //count the files 
     });
   }
 
   filterDates(second) {
+    //reset page ? 
     let fecha = new Array();
     if (!second) {
       fecha[0] = this.$time.date(this.fecha[0]) //this.moment(this.fecha[0]).format(sqlFormat);
@@ -46,17 +50,30 @@ export class AdminTicketComponent {
       fecha[1] = this.$time.date(this.fecha[1]);
     }
     this.model.fecha = `'${fecha[0]}' and '${fecha[1]}'`;
-    this.allTickets(this.model);
+    this.allTickets(this.model,1);
   }
+
+  currenTotal (filter) {
+    this.$bi.ticket('full_ticket')
+      .find(['count(id_ticket) total'],filter)
+      .then(response => this.totalTickets = response.data[0].total);
+  }
+
+
   $onInit() {
+    this.current = 1;
     //Carga todos los tickets sin filtro inicial
-    this.allTickets({tipo: 'II'});
+    this.allTickets({tipo: 'II'},1);
     //Modelo
     this.model = new Object();
     //Tecnicos
-    this.$bi.usuario('tecnicos').all().then(response => this.tecnicos = response.data);
+    this.$bi.usuario('tecnicos')
+      .all()
+      .then(response => this.tecnicos = response.data);
     //SERVICIOS
-    this.$bi.ticket().find(['distinct servicio']).then(response => this.servicios = this.$hummer.objectToArray(response.data));
+    this.$bi.ticket()
+      .find(['distinct servicio'])
+      .then(response => this.servicios = this.$hummer.objectToArray(response.data));
     //CLIENTES
     this.$bi.cliente('cliente_completo').all().then(response => this.clientes = response.data);
 
@@ -80,6 +97,8 @@ export class AdminTicketComponent {
         icon: 'remove_circle_outline'
       }
     ];
+
+
   }
 }
 

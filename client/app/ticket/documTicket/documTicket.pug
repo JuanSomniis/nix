@@ -12,8 +12,8 @@ div(layout='row' layout-padding )
         p
           i {{documento.texto}}
     //- Imagenes del ticket
-    md-card(ng-repeat='img in $ctrl.imgs' )
-      md-card-content
+    md-card
+      md-card-content(ng-repeat='img in $ctrl.imgs')
         img.responsive(ng-src='{{img.data_image}}')
 
     //==> Cuadro text box para documentar
@@ -65,7 +65,8 @@ div(layout='row' layout-padding )
               div(ng-if="$ctrl.modo === 'N' || $ctrl.modo === 'P' ") Documentar
               div(ng-if="$ctrl.modo == 'V'") Cerrar ticket
               div(ng-if=" $ctrl.modo == 'E' ") Escalar ticket
-  div(flex='30' layout='column')
+  features-list(id='$ctrl.id' flex='30' layout='column')
+  //-div(flex='30' layout='column')
     md-card
       div(ng-repeat='feature in $ctrl.features')
         md-card-header
