@@ -72,29 +72,32 @@ export function bifrostService($http, $hummer) {
 
 
   /*PUBLIC FUNCTIONS */
-  function usuario(vista) {
-    entity = vista ? vista : 'usuario';
+  function especificacion (_entity ='especificacion'){
+    entity = _entity;
+    return methods;
+  }
+  function usuario(_entity = 'usuario') {
+    entity = _entity
     return methods;
   }
 
-  function cliente(vista) {
-    entity = vista ? vista : 'cliente';
+  function cliente(_entity = 'cliente') {
+    entity = _entity;
     return methods;
   }
 
-  function activo() {
-    entity = 'activo';
+  function activo(_entity='activo') {
+    entity = _entity
     return methods;
   }
 
-  function area() {
-    entity = 'area';
+  function area(_entity ='area') {
+    entity = _entity;
     return methods;
   }
 
-  function ticket(vista){
-    entity = vista ? vista : 'ticket';
-
+  function ticket(_entity = 'ticket'){
+    entity = _entity
     return methods;
   }
 
@@ -132,6 +135,7 @@ export function bifrostService($http, $hummer) {
   this.usuario = usuario;
   this.cliente = cliente;
   this.activo = activo;
+  this.especificacion = especificacion;
 }
 
 export default angular.module('nixApp.bifrost', [])

@@ -15,13 +15,20 @@ export function hummerService() {
         //se instancia el valor para reducir codigo
         value =  `${theObject[key].toString()}`,
         //equals temporal dentro del for por cada item del objeto
-        _equals = equals;
+        _equals = equals,
+        //signa temporal dentro del for por cada item del objeto        
+        _signa = signa;
       //En caso que dentro del value haya un and se toma como fecha
       if(value.indexOf("and") !== -1) _equals = 'between'
+      //En caso que dentro del value haya un % se tomo con una sentencia like
+      else if(value.indexOf("%") !== -1) { 
+        _equals = 'like';
+        _signa = 'or';
+      }
       //De lo contrario se agregan las comillas simples para leerlo como varchar
       else value = `'${value}'`
       //Se concatena finalmente la sentencia
-      sentence += ` ${key} ${_equals} ${value} ${signa}`;
+      sentence += ` ${key} ${_equals} ${value} ${_signa}`;
     }
     //Se elimina el signa de mas que esta al final
     sentence = sentence.slice(0,lengthSigna);

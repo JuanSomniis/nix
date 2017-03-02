@@ -5,14 +5,18 @@ import routes from './addActivo.routes';
 
 export class AddActivoComponent {
   /*@ngInject*/
-  constructor($select, $bi, $hummer, $pop) {
+  constructor($select, $bi, $hummer, $pop,$q) {
     this.$select = $select;
     this.$bi = $bi;
     this.$hummer = $hummer;
     this.$pop = $pop;
+    this.$q = $q;
   }
 
   //Autocomplete inputs
+  searchEspecificaciones(query) {
+    return this.$select.search(query, this.espList);
+  }
   searchTipoActivo(query) {
     return this.$select.search(query, this.activosList);
   }
@@ -22,7 +26,11 @@ export class AddActivoComponent {
   searchArea(query) {
     return this.$select.searchFull(query, this.areaList, 'nombre');
   }
+  selectedEsp (selected) {
+    if(selected){
 
+    }
+  }
   selectedCliente(selected) {
     if(selected) {
       this.areaDisabled = false;
@@ -64,7 +72,6 @@ export class AddActivoComponent {
           });
       } else { //Se repite
         model.area = this.areaSeleccionada.id_area;
-
         this.ingresarActivo(model);
       }
     }
@@ -80,14 +87,48 @@ export class AddActivoComponent {
       model.tipoActivo,
       model.area
     ];
+
     this.$bi.activo().insert(arrVal)
-      .then(() => {
-        this.$pop.show('Activo registrado satisfactoriamente.');
-        this.model = new Object();
+      .then(response => {
+        //En  caso que se hayan registrado especificaciones 
+        if(this.espSearch[0].length > 0){
+          //Se resetea el modelo 
+          this.model = new Object();
+          //Crea un array para guardar las promesas
+          let promiseInputs = new Array();
+          //Loop para recorrer cada una de las especificaciones
+          //this.espInputs.forEach(input => {
+          for (let  i = 0; i < this.espInputs.length ; i++) {
+            //valida que value contenga texto
+            if(this.espInputs[i].value.length > 0){
+              //Modifica la variable inicial REUSE VARIABLE BOILERPLATE
+              arrVal = [
+                this.espSearch[i],
+                this.espInputs[i].value,
+                response.data[0].id_activo
+              ],
+              //Agrega una promesa (especificacion)  al array
+              promiseInputs.push(this.$bi.especificacion().insert(arrVal));
+            }
+          }
+            
+          //});
+          //Acciona todas las promesas
+          this.$q.all(promiseInputs)
+            .then(()=>this.$pop.show('Activo registrado satisfactoriamente'));
+        }else {
+          this.$pop.show('Activo registrado satisfactoriamente')
+        }
       });
   }
 
+  addEsp () {
+    this.espInputs.push({key : '',value :''})
+  }
+
   $onInit() {
+    //Instancia improvisada de los inputs para especificaciones
+    this.espInputs = [{key : '',value :''}]
     //Carga el select para tipo de activo
     this.$bi.activo().find(['distinct tipo_activo'])
       .then(response =>
@@ -96,6 +137,11 @@ export class AddActivoComponent {
     //Carga el select para cliente desde una vista
     this.$bi.cliente('cliente_completo').all()
       .then(response => this.clientesList = response.data);
+    //Carga las espesificaiones registradas
+    this.$bi.especificacion().find(['distinct _key'])
+      .then(response =>
+        this.espList = this.$hummer.objectToArray(response.data)
+      );
     //Se activa el botón de submit por defecto
     this.btnDisabled = false;
     //Se instancia el select para Area

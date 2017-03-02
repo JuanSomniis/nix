@@ -20,39 +20,57 @@ md-card
           td(md-cell='') {{activo.tipo_activo}}
           td(md-cell='') {{activo.serial}}
           td(md-cell='') {{activo.inventario}}
-
+  //-FILTROS
   md-container(layout='column' layout-padding ) 
     div(layout='row')
+      //-Busqueda general 
       md-input-container.md-block(flex='20')
         label Buscar...
         input(
           type='text'
-          ng-model='$ctrl.model.contacto'
+          ng-model='model.buscar'
           name='contacto'
         )
-      //CLIENTE + SEDE
-      md-autocomplete(
-        flex='', 
-        md-min-length='0', 
-        md-input-name='cliente', 
-        md-search-text='$ctrl.clienteSearch', 
-        md-items='item in $ctrl.searchCliente($ctrl.clienteSearch)', 
-        md-item-text='item.nombre', 
-        md-floating-label='Cliente', 
-        md-selected-item-change='$ctrl.selectedCliente(item)')
-        md-item-template
-          span(md-highlight-text='$ctrl.clienteSearch') {{item.nombre}}
-      //AREA
-      md-autocomplete(
-        ng-disabled='$ctrl.areaDisabled', 
-        flex='', 
-        md-min-length='0', 
-        md-selected-item-change='$ctrl.selectedArea(item)', 
-        md-input-name='area', 
-        md-search-text='$ctrl.areaSearch', 
-        md-items='item in $ctrl.searchArea($ctrl.areaSearch)', 
-        md-item-text='item.nombre', 
-        md-floating-label='Area')
-        md-item-template
-          span(md-highlight-text='$ctrl.areaSearch') {{item.nombre}}
+      //-CLIENTE 
+        md-autocomplete(
+          flex='', 
+          md-min-length='0', 
+          md-input-name='cliente', 
+          md-search-text='clienteSearch', 
+          md-items='item in searchCliente(clienteSearch)', 
+          md-item-text='item.nombre', 
+          md-floating-label='Cliente', 
+          md-selected-item-change='selectedCliente(item)')
+          md-item-template
+            span(md-highlight-text='clienteSearch') {{item.nombre}}
+      md-input-container.md-block(flex)
+          label Cliente
+          md-select(ng-model='model.cliente' ng-change='selectedCliente()')
+            md-option(
+              ng-repeat='cliente in clientesList'
+              ng-value='cliente.id_cliente'
+            )  {{cliente.nombre}}
+      //--AREA
+        md-autocomplete(
+          ng-disabled='areaDisabled', 
+          flex='', 
+          md-min-length='0', 
+          md-selected-item-change='selectedArea(item)', 
+          md-input-name='area', 
+          md-search-text='areaSearch', 
+          md-items='item in searchArea(areaSearch)', 
+          md-item-text='item.nombre', 
+          md-floating-label='Area')
+          md-item-template
+            span(md-highlight-text='areaSearch') {{item.nombre}}
+      md-input-container.md-block(flex)
+          label Area
+          md-select(
+          ng-disabled='areaDisabled' 
+          ng-model='model.area' 
+          ng-change='selectedArea()')
+            md-option(
+              ng-repeat='area in areaList'
+              ng-value='area.id_area'
+            )  {{area.nombre}}
   //-md-table-pagination(md-limit='query.limit', md-limit-options='[5, 10, 15]', md-page='query.page', md-total='{{desserts.count}}', md-on-paginate='getDesserts', md-page-select='')

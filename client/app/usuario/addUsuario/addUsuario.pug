@@ -29,6 +29,7 @@ div(layout='row', layout-align='center center')
         label Telefono
         input(type='text', name='telefono', ng-model='$ctrl.model.telefono')
       md-autocomplete(
+        md-min-length='0', 
         required='',
         flex='',
         md-input-name='rol',

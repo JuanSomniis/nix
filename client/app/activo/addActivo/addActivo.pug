@@ -1,5 +1,5 @@
 div(layout='row', layout-align='center center')
-  md-content(flex='45' layout-padding='')
+  md-content(flex='50' layout-padding='')
     md-card-title
       md-card-title-text
         span.md-headline Nuevo activo
@@ -81,7 +81,7 @@ div(layout='row', layout-align='center center')
           div(ng-messages='activoForm.inventario.$error')
             div(ng-message='required') Campo requerido.
             div(ng-message='md-maxlength') El campo de marca no puede superar los 40 caracteres.
-      md-input-container.md-block
+      //-md-input-container.md-block
         label Espesificaciones
         textarea(
           name='espesificaciones', 
@@ -119,6 +119,39 @@ div(layout='row', layout-align='center center')
             span(md-highlight-text='$ctrl.areaSearch') {{item.nombre}}
           div(ng-messages='activoForm.area.$error')
             div(ng-message='required') Debes seleccionar o registrar un area.
-      md-button.md-primary(
+      div(layout='row')
+        md-card-title
+          md-card-title-text
+            span.md-headline Especificaciones
+            p.md-body-1
+              | Lorem ipsum dolor sit amet, consectetur adipisicing elit. 
+              | Ipsa ducimus quas alias iusto, voluptas esse, aspernatur nobis 
+              | reprehenderit! Provident, error eaque veniam maxime optio in 
+              | dolorem sequi quaerat voluptate quae.
+      div(layout='row' ng-repeat='input in $ctrl.espInputs')
+        //-Especificaciones
+        md-autocomplete(          
+          flex='', 
+          md-selected-item ='input.key'
+          md-min-length='0', 
+          md-search-text='$ctrl.espSearch[$index]', 
+          md-items='item in $ctrl.searchEspecificaciones($ctrl.espSearch[$index])', 
+          md-item-text='item', 
+          md-floating-label='Parte')
+          md-item-template
+            span(md-highlight-text='$ctrl.espSearch') {{item}}
+        //- Valor de la caracteristica
+        md-input-container.md-block(flex='')
+          label Valor
+          input(
+            type='text', 
+            ng-model='input.value', 
+            md-maxlength='40' )
+        md-input-container.md-block(flex='10' ng-show='$last')
+          md-button.md-icon-button.md-primary(
+            aria-label='More3' 
+            ng-click='$ctrl.addEsp()')
+            i.material-icons add
+      md-button.md-primary.raised(
         type='submit', 
         ng-disabled='$ctrl.btnDisabled') Registrar

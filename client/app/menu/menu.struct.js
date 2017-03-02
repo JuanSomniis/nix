@@ -10,11 +10,11 @@ exports = module.exports = [{
     icon: 'content_paste',
     state: 'm.adminTicket',
     title: 'Administrar'
-  }, {
+  }/*, {
     icon: 'bookmark_border',
     state: 'm.requestTicket',
     title: 'Solicitar'
-  }]
+  }*/]
 }, {
   title: 'Clientes',
   items: [{
@@ -23,7 +23,7 @@ exports = module.exports = [{
     title: 'Agregar'
   },{
     icon: 'supervisor_account',
-    state: 'adminCliente',
+    state: 'm.adminCliente',
     title: 'Administrar'
   }]
 }, {
@@ -34,7 +34,7 @@ exports = module.exports = [{
     title: 'Agregar'
   },{
     icon: 'supervisor_account',
-    state: 'adminCliente',
+    state: 'm.adminUsuario',
     title: 'Administrar'
   }]
 }, {
@@ -45,11 +45,11 @@ exports = module.exports = [{
     title: 'Agregar'
   },{
     icon: 'assignment',
-    state: 'adminActivo',
+    state: 'm.adminInventario',
     title: 'Administrar'
   },{
     icon: 'description',
-    state: 'hojaActivo',
+    state: 'm.hojaActivo',
     title: 'Hoja de vida'
   }]
 }]
